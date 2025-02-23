@@ -5,8 +5,9 @@ class AppModel {
   String appPackageName;
   Uint8List appIcon;
 
-  AppModel(
-      {required this.appName,
-      required this.appPackageName,
-      required this.appIcon});
+  AppModel({
+    required this.appName,
+    required this.appPackageName,
+    required this.appIcon,
+  });
 }

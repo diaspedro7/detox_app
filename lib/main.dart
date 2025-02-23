@@ -19,6 +19,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox("obterTempoBackground");
   await Hive.openBox("permissionStorage");
+  await Hive.openBox("selectedAppsStorage");
 
   runApp(ChangeNotifierProvider(
       create: (_) => AppViewModel(), child: const MyApp()));
