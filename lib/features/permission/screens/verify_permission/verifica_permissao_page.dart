@@ -4,7 +4,7 @@ import 'package:dash_bubble/dash_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../../../main.dart';
+import '../../../../data/services/background/calculate_time_service.dart';
 import '../../../detox/screens/home/home_page.dart';
 import '../ask_permission/pedir_permissao_page.dart';
 

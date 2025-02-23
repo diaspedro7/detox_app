@@ -29,6 +29,7 @@ class MainActivity: FlutterActivity(){
                val timeResult = getActiveAppPackageName(this@MainActivity)
                result.success(timeResult)
             }
+            
         }
     }
 
@@ -81,4 +82,8 @@ class MainActivity: FlutterActivity(){
         }
 
     }
+
+
+
+
 }
