@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_usage/app_usage.dart';
 import 'package:detox_app/data/services/background/push_screen_service.dart';
+import 'package:detox_app/data/services/selected_apps_hive.dart';
 import 'package:detox_app/data/services/time_storage_hive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -29,11 +30,19 @@ Future<void> obterTempo(ServiceInstance service) async {
 
 Future<void> calculaTempo(
     String result, FlutterBackgroundService service) async {
-  List<String> monitoredApps = [
-    'com.roblox.client',
-    'com.zhiliaoapp.musically',
-    'com.google.android.youtube'
-  ];
+  List<String> monitoredApps = getSelectedAppsMap()
+      .entries
+      .where((entry) => entry.value) // Filtra apenas os valores `true`
+      .map((entry) => entry.key) // Pega as chaves correspondentes
+      .toList();
+
+  debugPrint("MonitoredApps: $monitoredApps");
+
+  // List<String> monitoredApps = [
+  //   'com.roblox.client',
+  //   'com.zhiliaoapp.musically',
+  //   'com.google.android.youtube'
+  // ];
 
   if (monitoredApps.contains(result)) {
     int tempo = getTempoSalvo();
