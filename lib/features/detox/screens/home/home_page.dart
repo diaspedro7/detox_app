@@ -35,74 +35,172 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Consumer<AppViewModel>(
-                  builder: (context, viewmodel, child) => ExpansionTile(
-                      // backgroundColor: TColors.white,
-                      collapsedBackgroundColor: TColors.white,
-                      title: Text("Select apps"),
-                      onExpansionChanged: (value) {
-                        viewmodel.getAppsList();
-                        if (value == false) {
-                          debugPrint("Entrou no if do value");
-                          viewmodel.setSelectedAppsLocalDatabase();
-                        }
-                      },
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          height: TSizes.listViewHeight,
-                          child: ListView.builder(
-                            itemCount: viewmodel.appsList.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: TSizes.twelve),
-                                child: Container(
-                                  height: TSizes.selectAppsTileHeight,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      color: TColors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(TSizes.md)),
-                                  child: Row(
-                                    children: [
-                                      viewmodel.appsList[index].appIcon
-                                              .isNotEmpty
-                                          ? Image.memory(
-                                              viewmodel.appsList[index].appIcon,
-                                              width: TSizes.appsImage,
-                                              height: TSizes.appsImage)
-                                          : Icon(Icons.android,
-                                              size: TSizes.appsImage),
-                                      SizedBox(
-                                        width: TSizes.selectAppsTileTextWidth,
-                                        child: Text(
-                                          viewmodel.appsList[index].appName,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .apply(color: TColors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
+                  builder: (context, viewmodel, child) => Card(
+                    elevation: TSizes.sm,
+                    shadowColor: Colors.black.withOpacity(0.1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(TSizes.md),
+                    ),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        dividerColor:
+                            Colors.transparent, // Remove a linha padrão
+                        splashColor:
+                            Colors.transparent, // Remove splash quadrado
+                        highlightColor:
+                            Colors.transparent, // Remove highlight feio
+                      ),
+                      child: ExpansionTile(
+                        collapsedBackgroundColor: TColors.white,
+                        backgroundColor: TColors.white,
+                        collapsedShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(TSizes.md),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(TSizes.md),
+                        ),
+                        title: Text("Select Apps",
+                            style: Theme.of(context).textTheme.titleMedium),
+                        onExpansionChanged: (value) {
+                          viewmodel.getAppsList();
+                          if (!value) {
+                            viewmodel.setSelectedAppsLocalDatabase();
+                          }
+                        },
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: TColors.backgroundColor,
+                              borderRadius: BorderRadius.vertical(
+                                  bottom: Radius.circular(TSizes.md)),
+                            ),
+                            child: viewmodel.appsList.isEmpty
+                                ? Padding(
+                                    padding: EdgeInsets.all(TSizes.xl),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(TSizes.twelve),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                                TSizes.md),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.1),
+                                                blurRadius: TSizes.ten,
+                                                offset: Offset(2, 2),
+                                              ),
+                                              BoxShadow(
+                                                color: Colors.white
+                                                    .withOpacity(0.8),
+                                                blurRadius: TSizes.sm,
+                                                offset: Offset(-2, -2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: CircularProgressIndicator(
+                                            color: Colors.blueAccent,
+                                            strokeWidth: TSizes.xs,
+                                          ),
                                         ),
-                                      ),
-                                      Checkbox(
-                                        value: viewmodel.selectedAppsMap[
-                                                viewmodel.appsList[index]
-                                                    .appPackageName] ??
-                                            false,
-                                        onChanged: (value) {
-                                          viewmodel.selectApp(viewmodel
-                                              .appsList[index].appPackageName);
-                                        },
-                                      )
-                                    ],
+                                        SizedBox(height: TSizes.spaceBtwItems),
+                                        Text("Loading...",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium),
+                                      ],
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: viewmodel.appsList.length,
+                                    itemBuilder: (context, index) {
+                                      final app = viewmodel.appsList[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: TSizes.sm,
+                                            horizontal: TSizes.md),
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: TSizes.twelve,
+                                              horizontal: TSizes.md),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                                TSizes.twelve),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.05),
+                                                blurRadius: TSizes.sm,
+                                                offset: Offset(
+                                                    0, TSizes.appsImage / 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              app.appIcon.isNotEmpty
+                                                  ? ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              TSizes.sm),
+                                                      child: Image.memory(
+                                                        app.appIcon,
+                                                        width: TSizes.appsImage,
+                                                        height:
+                                                            TSizes.appsImage,
+                                                      ),
+                                                    )
+                                                  : Icon(Icons.android,
+                                                      size: TSizes.appsImage,
+                                                      color: Colors.grey),
+                                              SizedBox(width: TSizes.twelve),
+                                              Expanded(
+                                                child: Text(
+                                                  app.appName,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                              Checkbox(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          TSizes.xs),
+                                                ),
+                                                activeColor: Colors.blueAccent,
+                                                value: viewmodel
+                                                            .selectedAppsMap[
+                                                        app.appPackageName] ??
+                                                    false,
+                                                onChanged: (value) {
+                                                  viewmodel.selectApp(
+                                                      app.appPackageName);
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ),
-                              );
-                            },
                           ),
-                        )
-                      ]),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -77,6 +77,6 @@ class TSizes {
   // Home Page
   static const double listViewHeight = 600.0;
   static const double selectAppsTileHeight = 70.0;
-  static const double appsImage = 50.0;
+  static const double appsImage = 40.0;
   static const double selectAppsTileTextWidth = 250.0;
 }
