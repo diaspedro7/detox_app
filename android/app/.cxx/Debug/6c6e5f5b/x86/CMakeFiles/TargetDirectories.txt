@@ -1,0 +1,2 @@
+C:/Users/Pedro/Flutter Projects/development/detox_app/android/app/.cxx/Debug/6c6e5f5b/x86/CMakeFiles/edit_cache.dir
+C:/Users/Pedro/Flutter Projects/development/detox_app/android/app/.cxx/Debug/6c6e5f5b/x86/CMakeFiles/rebuild_cache.dir

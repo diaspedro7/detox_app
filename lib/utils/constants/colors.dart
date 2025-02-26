@@ -4,7 +4,7 @@ class TColors {
   TColors._();
 
   // App theme colors
-  static const Color primary = Color.fromARGB(255, 75, 165, 255);
+  static const Color primary = Colors.blueAccent;
   static const Color secondary = Color.fromARGB(255, 75, 255, 111);
   static const Color accent = Color(0xFFb0c7ff);
 
@@ -27,7 +27,7 @@ class TColors {
 
   // Background Container colors
   static const Color lightContainer = Color(0xFFF6F6F6);
-  static Color darkContainer = TColors.white.withOpacity(0.1);
+  static Color darkContainer = TColors.white.withValues(alpha: 0.1);
 
   // Button colors
   static const Color buttonPrimary = Color.fromARGB(255, 75, 165, 255);
