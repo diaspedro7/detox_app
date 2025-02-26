@@ -10,12 +10,20 @@ void setTempoSalvo(int tempo) {
   boxTempo.put('tempoSalvoKey', tempo);
 }
 
+int getIntervalTime() {
+  return boxTempo.get('intervalTimeKey', defaultValue: 600);
+}
+
+void setIntervalTime(int tempo) {
+  boxTempo.put('intervalTimeKey', tempo);
+}
+
 void setTempoDeIntervaloSomado(int valor) async {
-  await boxTempo.put('tempoDeIntervaloKey', valor);
+  await boxTempo.put('tempoDeIntervaloSomadoKey', valor);
 }
 
 int getTempoDeIntervaloSomado() {
-  return boxTempo.get('tempoDeIntervaloKey', defaultValue: 10);
+  return boxTempo.get('tempoDeIntervaloSomadoKey', defaultValue: 10);
 }
 
 int getTempoTemporizador() {
