@@ -228,9 +228,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: "395d51876f9b5b4bc620d8549b05755c6f1966ba"
-      url: "https://github.com/VB10/installed_apps"
+      ref: master
+      resolved-ref: "36b58d51c7400a2d15897186277d0842cab255fb"
+      url: "https://github.com/diaspedro7/installed_apps.git"
     source: git
     version: "1.5.2"
   intl:

@@ -79,6 +79,7 @@ class TSizes {
   static const double selectAppsTileHeight = 70.0;
   static const double appsImage = 40.0;
   static const double selectAppsTileTextWidth = 250.0;
+  static const double addAppsWidget = 50.0;
 
   //Request Permission Page
   static const double spaceBtwTitles = 90.0;

@@ -42,7 +42,9 @@ dependencies:
   flutter_local_notifications: ^18.0.0
   android_power_manager: ^1.0.0
   installed_apps:
-    git: https://github.com/VB10/installed_apps
+    git:
+      url: https://github.com/diaspedro7/installed_apps.git
+      ref: master  
   provider: ^6.1.2
   syncfusion_flutter_gauges: ^28.2.6
   android_intent_plus: ^5.3.0
