@@ -1,3 +1,4 @@
+import 'package:detox_app/data/services/background/calculate_time_service.dart';
 import 'package:detox_app/features/permission/statecontroller/permission_statecontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class _VerificaPermissaoPageState extends State<VerificaPermissaoPage> {
     // getPermission();
     // initializeData();
     //  Future.delayed(const Duration(seconds: 3));
-    //fetchAppUsage(DateTime.now());
+    fetchAppUsage(DateTime.now());
   }
 
   @override

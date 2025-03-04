@@ -11,19 +11,12 @@ class AppViewModel extends ChangeNotifier {
 
   List<AppModel> monitoredApps = [];
 
-  bool appsListViewVisibility = false;
-
   void getAppsList() async {
     //get all the apps from the device
     List<AppInfo> installedApps =
         await InstalledApps.getInstalledApps(false, true, true);
 
-    // AppInfo? addYouTube = await InstalledApps.getAppInfo(
-    //     "com.google.android.youtube", BuiltWith.native_or_others);
-
-    // if (addYouTube != null) {
-    //   installedApps.add(addYouTube);
-    // }
+    List<String> monitoredAppsPackageName = getMonitoredAppsLocalDatabase();
 
     //check if the app is already in the appList. It does it so the app is not added again
     for (var app in installedApps) {
@@ -33,7 +26,7 @@ class AppViewModel extends ChangeNotifier {
       bool exists = appsList
           .any((existingApp) => existingApp.appPackageName == app.packageName);
 
-      if (!exists) {
+      if (!exists && !monitoredAppsPackageName.contains(app.packageName)) {
         //add the app to the appList if does not
         appsList.add(AppModel(
             appName: app.name,
@@ -54,6 +47,7 @@ class AppViewModel extends ChangeNotifier {
   }
 
   void addMonitoredApps() {
+    List<String> saveAppsPackageName = [];
     //get checked apps
     var newApps =
         appsList.where((app) => selectedAppsMap[app.appPackageName]!).toList();
@@ -63,12 +57,24 @@ class AppViewModel extends ChangeNotifier {
       if (!monitoredApps
           .any((monitored) => monitored.appPackageName == app.appPackageName)) {
         monitoredApps.add(app);
+        saveAppsPackageName.add(app.appPackageName);
       }
     }
+    setMonitoredApps(saveAppsPackageName);
     notifyListeners();
   }
 
   void setSelectedAppsLocalDatabase() {
     setSelectedAppsMap(selectedAppsMap);
+  }
+
+  List<String> getMonitoredAppsLocalDatabase() {
+    return getMonitoredApps();
+  }
+
+  void setMapMonitoredAppsTime(List<String> apps, int time) {
+    Map<String, int> appTimeMap = getAppTimeMap();
+    appTimeMap.addAll({for (var app in apps) app: time});
+    setAppTimeMap(appTimeMap);
   }
 }

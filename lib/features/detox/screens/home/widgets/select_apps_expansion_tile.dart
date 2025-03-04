@@ -38,10 +38,10 @@ class SelectAppsExpansionTile extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium),
           onExpansionChanged: (value) {
             viewmodel.getAppsList();
-            if (!value) {
-              viewmodel.setSelectedAppsLocalDatabase();
-              viewmodel.addMonitoredApps();
-            }
+            // if (!value) {
+            //   viewmodel.setSelectedAppsLocalDatabase();
+            //   viewmodel.addMonitoredApps();
+            // }
           },
           children: [
             Container(

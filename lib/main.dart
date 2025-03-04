@@ -47,9 +47,11 @@ void main() async {
         var channel = const MethodChannel("appsTimeUsage");
 
         String resultText = await channel.invokeMethod('getTime');
+        debugPrint("Esse Result1: $resultText");
+
         calculaTempo(resultText, service);
 
-        debugPrint("Result: $resultText");
+        debugPrint("Esse Result2: $resultText");
       }
     }
   });

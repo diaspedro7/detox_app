@@ -38,22 +38,20 @@ Future<void> calculaTempo(
 
   debugPrint("MonitoredApps: $monitoredApps");
 
-  // List<String> monitoredApps = [
-  //   'com.roblox.client',
-  //   'com.zhiliaoapp.musically',
-  //   'com.google.android.youtube'
-  // ];
-
   if (monitoredApps.contains(result)) {
-    int tempo = getTempoSalvo();
-    tempo = tempo + 5;
+    //If the last apps used is in the list
+    int tempo = getTempoSalvo(); //get the last saved time
+    tempo = tempo + 5; //add the time has passed
     debugPrint("TempoSalvo: $tempo");
-    setTempoSalvo(tempo);
+    setTempoSalvo(tempo); //save the new time that has passed
     debugPrint("Tempo de intervalo: ${getTempoDeIntervaloSomado()}");
-    if (tempo >= getTempoDeIntervaloSomado()) {
+    if (tempo >= getAppTimeMap()[result]!) {
+      //if (tempo >= getTempoDeIntervaloSomado()) { //if the time has passed is greater than the estipulated time
+      //TODO: Add the logic to what is gonna do after the time has finished
       debugPrint("Entrou no passar o intervalo");
-      setTempoDeIntervaloSomado(tempo + getTempoTemporizador());
-      exibirTela(service);
+      setTempoDeIntervaloSomado(tempo +
+          getTempoTemporizador()); //add the interval time and the time that has passed
+      exibirTela(service); //go to the alarm screen
     }
   }
 }
