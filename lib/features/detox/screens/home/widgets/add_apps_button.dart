@@ -1,3 +1,4 @@
+import 'package:detox_app/features/detox/screens/home/widgets/add_apps_showmodal.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ class AddAppsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "/add");
+        //Navigator.pushNamed(context, "/add");
+        showAddAppsModal(context);
       },
       child: Container(
         height: TSizes.addAppsWidget,

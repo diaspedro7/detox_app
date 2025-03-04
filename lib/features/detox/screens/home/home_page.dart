@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_import
 
 import 'package:detox_app/common/widgets/circular_slide_widget.dart';
-import 'package:detox_app/features/detox/screens/home/widgets/add_apps.dart';
+import 'package:detox_app/features/detox/screens/home/widgets/add_apps_button.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/select_apps_expansion_tile.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';

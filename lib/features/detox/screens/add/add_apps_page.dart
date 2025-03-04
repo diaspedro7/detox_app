@@ -20,8 +20,24 @@ class AddAppsPage extends StatelessWidget {
         backgroundColor: TColors.backgroundColor,
         appBar: AppBar(
           title: const Text(
-            "Add apps",
+            "Add the Apps",
             style: TextStyle(color: TColors.white),
+          ),
+          elevation: 4,
+          shadowColor: Colors.black26,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_rounded,
+                color: TColors.white,
+                size: 28,
+              ),
+            ),
           ),
           centerTitle: true,
           actions: [
