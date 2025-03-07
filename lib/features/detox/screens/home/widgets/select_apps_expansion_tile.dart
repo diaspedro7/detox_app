@@ -66,7 +66,7 @@ class SelectAppsExpansionTile extends StatelessWidget {
                         itemCount: viewmodel.appsList.length,
                         itemBuilder: (context, index) {
                           final app = viewmodel.appsList[index];
-                          return AppTile(app: app, viewmodel: viewmodel);
+                          return AppTile(app: app);
                         },
                       ),
               ]),

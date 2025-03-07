@@ -56,6 +56,7 @@ class AddAppsPage extends StatelessWidget {
                   debugPrint("MapAppTime: ${getAppTimeMap()}");
                   debugPrint("Salvado com sucesso");
                   await Future.delayed(Duration(seconds: 3));
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 },
               ),

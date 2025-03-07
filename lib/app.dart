@@ -2,6 +2,7 @@
 
 import 'package:detox_app/data/services/permission_storage_hive.dart';
 import 'package:detox_app/features/detox/screens/add/add_apps_page.dart';
+import 'package:detox_app/features/detox/screens/select_apps/select_apps_page.dart';
 import 'package:detox_app/features/permission/screens/verify_permission/verifica_permissao_page.dart';
 import 'package:detox_app/main.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       routes: {
         "/home": (context) => const HomePage(),
         "/add": (context) => const AddAppsPage(),
+        "/select": (context) => const SelectAppsPage(),
       },
       home:
           //const AddAppsPage()
