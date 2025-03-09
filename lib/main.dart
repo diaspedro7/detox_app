@@ -2,6 +2,7 @@ import 'package:detox_app/app.dart';
 import 'package:detox_app/data/services/background/flutter_background_service.dart';
 import 'package:detox_app/data/services/background/push_screen_service.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
+import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/features/permission/statecontroller/permission_statecontroller.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AppViewModel()),
     ChangeNotifierProvider(create: (_) => PermissionStateController()),
+    ChangeNotifierProvider(create: (_) => SelectAppsPageStatecontroller()),
     ChangeNotifierProvider(create: (_) => CircularSlideStateController()),
   ], child: const MyApp()));
 

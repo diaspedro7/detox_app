@@ -2,6 +2,7 @@ import 'package:detox_app/common/widgets/circular_slide_widget.dart';
 import 'package:detox_app/data/services/selected_apps_hive.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/select_apps.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
+import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
@@ -44,42 +45,52 @@ void showAddAppsModal(BuildContext context) {
                     .apply(color: TColors.darkGrey)),
 
             const SizedBox(height: TSizes.spaceBtwSections),
-            //  const SelectAppsExpansionTile(),
-            GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, "/select");
-                },
-                child: const SelectApps()),
+            //const SelectAppsExpansionTile(),
+            Consumer<AppViewModel>(
+              builder: (context, viewmodel, child) =>
+                  Consumer<SelectAppsPageStatecontroller>(
+                builder: (context, pageController, child) => GestureDetector(
+                    onTap: () async {
+                      Navigator.pushNamed(context, "/select");
+                    },
+                    child: const SelectApps()),
+              ),
+            ),
             // const SizedBox(height: 16),
             Consumer<CircularSlideStateController>(
               builder: (context, controller, child) =>
                   CircularSlide(controller: controller),
             ),
-            Consumer<AppViewModel>(
-              builder: (context, viewmodel, child) =>
-                  Consumer<CircularSlideStateController>(
-                builder: (context, controller, child) => ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: TColors.primary,
-                    foregroundColor: TColors.white,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+            Consumer<SelectAppsPageStatecontroller>(
+              builder: (context, selectPageController, child) =>
+                  Consumer<AppViewModel>(
+                builder: (context, viewmodel, child) =>
+                    Consumer<CircularSlideStateController>(
+                  builder: (context, controller, child) => ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: TColors.primary,
+                      foregroundColor: TColors.white,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                  ),
-                  onPressed: () async {
-                    viewmodel.setSelectedAppsLocalDatabase();
-                    viewmodel.addMonitoredApps();
-                    viewmodel.setMapMonitoredAppsTime(
-                        viewmodel.getMonitoredAppsLocalDatabase(),
-                        controller.radialValue.ceil() * 60);
-                    debugPrint("MapAppTime: ${getAppTimeMap()}");
-                    debugPrint("Salvado com sucesso");
-                    await Future.delayed(const Duration(seconds: 3));
-                  },
-                  child: const Text(
-                    "Save Changes",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    onPressed: () async {
+                      viewmodel.setSelectedAppsLocalDatabase();
+                      await viewmodel.setMonitoredAppsLocalDatabase();
+                      viewmodel.setMapAppsTime(
+                          await viewmodel.getMonitoredAppsLocalDatabase(),
+                          controller.radialValue.ceil() * 60);
+                      selectPageController.mapClear();
+                      debugPrint("MapAppTime: ${getAppTimeMap()}");
+                      debugPrint("Salvado com sucesso");
+                      await Future.delayed(const Duration(seconds: 3));
+                    },
+                    child: const Text(
+                      "Save Changes",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),

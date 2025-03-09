@@ -1,5 +1,5 @@
 import 'package:detox_app/features/detox/models/app_model.dart';
-import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
+import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,8 @@ class AppTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewmodel = context.watch<AppViewModel>();
+    final controller = context.watch<SelectAppsPageStatecontroller>();
+    // final viewmodel = context.watch<AppViewModel>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -60,9 +61,11 @@ class AppTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(TSizes.xs),
               ),
               activeColor: Colors.blueAccent,
-              value: viewmodel.selectedAppsMap[app.appPackageName] ?? false,
+              value: controller.selectedAppsMap[app.appPackageName] ?? false,
+              // value: viewmodel.selectedAppsMap[app.appPackageName] ?? false,
               onChanged: (value) {
-                viewmodel.selectApp(app.appPackageName);
+                controller.toggleAppSelection(app.appPackageName);
+                // viewmodel.selectApp(app.appPackageName);
               },
             )
           ],

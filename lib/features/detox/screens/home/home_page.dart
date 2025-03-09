@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_import
 
 import 'package:detox_app/common/widgets/circular_slide_widget.dart';
+import 'package:detox_app/data/services/selected_apps_hive.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/add_apps_button.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/select_apps_expansion_tile.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
@@ -52,30 +53,56 @@ class _HomePageState extends State<HomePage> {
                       Text("Monitored apps: ${viewmodel.monitoredApps.length}"),
                       const SizedBox(height: TSizes.spaceBtwItems),
                       SizedBox(
-                        height: 60,
+                        //height: 60,
+                        height: 150,
                         child: Row(
                           children: [
                             AddAppsWidget(),
                             Expanded(
-                              child: ListView.builder(
-                                  itemCount: viewmodel.monitoredApps.length,
-                                  scrollDirection: Axis.horizontal,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: TSizes.twelve),
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      height: TSizes.addAppsWidget,
-                                      width: TSizes.addAppsWidget,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            TSizes.twelve),
-                                      ),
-                                      child: Image.memory(
-                                        viewmodel.monitoredApps[index].appIcon,
-                                        width: TSizes.appsImage,
-                                        height: TSizes.appsImage,
-                                      ),
-                                    );
+                              child: FutureBuilder<List<String>>(
+                                  future: getMonitoredApps(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    }
+
+                                    final monitoredApps = snapshot.data ?? [];
+                                    return ListView.builder(
+                                        // itemCount: viewmodel.monitoredApps.length,
+                                        itemCount: monitoredApps.length,
+                                        scrollDirection: Axis.horizontal,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: TSizes.twelve),
+                                        itemBuilder: (context, index) {
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                  height: TSizes.addAppsWidget,
+                                                  width: TSizes.addAppsWidget,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            TSizes.twelve),
+                                                  ),
+                                                  child: Icon(Icons.android)
+                                                  // Image.memory(
+                                                  //   viewmodel.monitoredApps[index].appIcon,
+                                                  //   width: TSizes.appsImage,
+                                                  //   height: TSizes.appsImage,
+                                                  // ),
+                                                  ),
+                                              SizedBox(
+                                                  height: TSizes.addAppsWidget,
+                                                  width: TSizes.addAppsWidget,
+                                                  child: Text(
+                                                    monitoredApps[index],
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ))
+                                            ],
+                                          );
+                                        });
                                   }),
                             ),
                           ],

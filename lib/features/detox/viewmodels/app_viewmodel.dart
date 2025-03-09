@@ -11,12 +11,14 @@ class AppViewModel extends ChangeNotifier {
 
   List<AppModel> monitoredApps = [];
 
-  void getAppsList() async {
+  Future<void> getAppsList() async {
     //get all the apps from the device
     List<AppInfo> installedApps =
         await InstalledApps.getInstalledApps(false, true, true);
 
-    List<String> monitoredAppsPackageName = getMonitoredAppsLocalDatabase();
+    List<String> monitoredAppsPackageName =
+        await getMonitoredAppsLocalDatabase();
+    debugPrint("Local database: $monitoredAppsPackageName");
 
     //check if the app is already in the appList. It does it so the app is not added again
     for (var app in installedApps) {
@@ -40,13 +42,18 @@ class AppViewModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+  //Got substituted by the selectPageStateController
+  // void selectApp(String packageName) {
+  //   selectedAppsMap[packageName] = !selectedAppsMap[packageName]!;
+  //   notifyListeners();
+  // }
 
-  void selectApp(String packageName) {
-    selectedAppsMap[packageName] = !selectedAppsMap[packageName]!;
+  void recieveSelectedApps(Map<String, bool> selecteds) {
+    selectedAppsMap = selecteds;
     notifyListeners();
   }
 
-  void addMonitoredApps() {
+  Future<void> setMonitoredAppsLocalDatabase() async {
     List<String> saveAppsPackageName = [];
     //get checked apps
     var newApps =
@@ -60,21 +67,35 @@ class AppViewModel extends ChangeNotifier {
         saveAppsPackageName.add(app.appPackageName);
       }
     }
-    setMonitoredApps(saveAppsPackageName);
+    //add too the apps who are already in the list
+    saveAppsPackageName.addAll(await getMonitoredApps());
+
+    await setMonitoredApps(saveAppsPackageName);
     notifyListeners();
   }
 
   void setSelectedAppsLocalDatabase() {
+    //debugPrint("Iniciando salvamento - selectedAppsMap: $selectedAppsMap");
+    if (selectedAppsMap.isEmpty) {
+      debugPrint("Erro: Tentando salvar um mapa vazio!");
+      return;
+    }
+
     setSelectedAppsMap(selectedAppsMap);
   }
 
-  List<String> getMonitoredAppsLocalDatabase() {
-    return getMonitoredApps();
+  Future<List<String>> getMonitoredAppsLocalDatabase() async {
+    return await getMonitoredApps();
   }
 
-  void setMapMonitoredAppsTime(List<String> apps, int time) {
+  void setMapAppsTime(List<String> apps, int time) {
     Map<String, int> appTimeMap = getAppTimeMap();
     appTimeMap.addAll({for (var app in apps) app: time});
     setAppTimeMap(appTimeMap);
+  }
+
+  void clearAppsList() {
+    appsList.clear();
+    notifyListeners();
   }
 }

@@ -49,9 +49,9 @@ class AddAppsPage extends StatelessWidget {
                 ),
                 onPressed: () async {
                   viewmodel.setSelectedAppsLocalDatabase();
-                  viewmodel.addMonitoredApps();
-                  viewmodel.setMapMonitoredAppsTime(
-                      viewmodel.getMonitoredAppsLocalDatabase(),
+                  await viewmodel.setMonitoredAppsLocalDatabase();
+                  viewmodel.setMapAppsTime(
+                      await viewmodel.getMonitoredAppsLocalDatabase(),
                       controller.radialValue.ceil() * 60);
                   debugPrint("MapAppTime: ${getAppTimeMap()}");
                   debugPrint("Salvado com sucesso");
