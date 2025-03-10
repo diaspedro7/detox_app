@@ -27,6 +27,15 @@ class _HomePageState extends State<HomePage> {
     if (getPermission() == false) {
       setPermission();
     }
+    _loadMonitoredApps();
+  }
+
+  Future<void> _loadMonitoredApps() async {
+    final apps = await getMonitoredApps();
+    if (mounted) {
+      final viewModel = Provider.of<AppViewModel>(context, listen: false);
+      await viewModel.getSpecificApps(apps);
+    }
   }
 
   @override
@@ -53,57 +62,36 @@ class _HomePageState extends State<HomePage> {
                       Text("Monitored apps: ${viewmodel.monitoredApps.length}"),
                       const SizedBox(height: TSizes.spaceBtwItems),
                       SizedBox(
-                        //height: 60,
-                        height: 150,
+                        height: 60,
                         child: Row(
                           children: [
                             AddAppsWidget(),
                             Expanded(
-                              child: FutureBuilder<List<String>>(
-                                  future: getMonitoredApps(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator();
-                                    }
-
-                                    final monitoredApps = snapshot.data ?? [];
-                                    return ListView.builder(
-                                        // itemCount: viewmodel.monitoredApps.length,
-                                        itemCount: monitoredApps.length,
-                                        scrollDirection: Axis.horizontal,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: TSizes.twelve),
-                                        itemBuilder: (context, index) {
-                                          return Column(
-                                            children: [
-                                              Container(
-                                                  height: TSizes.addAppsWidget,
-                                                  width: TSizes.addAppsWidget,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            TSizes.twelve),
-                                                  ),
-                                                  child: Icon(Icons.android)
-                                                  // Image.memory(
-                                                  //   viewmodel.monitoredApps[index].appIcon,
-                                                  //   width: TSizes.appsImage,
-                                                  //   height: TSizes.appsImage,
-                                                  // ),
-                                                  ),
-                                              SizedBox(
-                                                  height: TSizes.addAppsWidget,
-                                                  width: TSizes.addAppsWidget,
-                                                  child: Text(
-                                                    monitoredApps[index],
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ))
-                                            ],
-                                          );
-                                        });
-                                  }),
+                              child: Consumer<AppViewModel>(
+                                  builder: (context, viewmodel, child) =>
+                                      ListView.builder(
+                                          // itemCount: viewmodel.monitoredApps.length,
+                                          itemCount:
+                                              viewmodel.monitoredApps.length,
+                                          scrollDirection: Axis.horizontal,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: TSizes.twelve),
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                                height: TSizes.addAppsWidget,
+                                                width: TSizes.addAppsWidget,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          TSizes.twelve),
+                                                ),
+                                                child: Image.memory(
+                                                  viewmodel.monitoredApps[index]
+                                                      .appIcon,
+                                                  width: TSizes.appsImage,
+                                                  height: TSizes.appsImage,
+                                                ));
+                                          })),
                             ),
                           ],
                         ),

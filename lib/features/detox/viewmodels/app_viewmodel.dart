@@ -42,6 +42,51 @@ class AppViewModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> getSpecificApps(List<String> packageNames) async {
+    monitoredApps.clear();
+
+    // Get all installed apps at once
+    List<AppInfo> installedApps =
+        await InstalledApps.getInstalledApps(false, true, true);
+
+    // Filter and add only the apps that are in our packageNames list
+    for (var app in installedApps) {
+      if (packageNames.contains(app.packageName)) {
+        monitoredApps.add(
+          AppModel(
+            appName: app.name,
+            appIcon: app.icon ?? Uint8List(0),
+            appPackageName: app.packageName,
+          ),
+        );
+      }
+    }
+
+    notifyListeners();
+  }
+
+  // Future<void> getSpecificApps(List<String> packageNames) async {
+  //   monitoredApps.clear();
+
+  //   for (String packageName in packageNames) {
+  //     final AppInfo? appInfo = await InstalledApps.getAppInfo(
+  //         packageName, BuiltWith.native_or_others);
+
+  //     if (appInfo != null) {
+  //       monitoredApps.add(
+  //         AppModel(
+  //           appName: appInfo.name,
+  //           appIcon: appInfo.icon ?? Uint8List(0),
+  //           appPackageName: appInfo.packageName,
+  //         ),
+  //       );
+  //     }
+  //   }
+
+  //   notifyListeners();
+  // }
+
   //Got substituted by the selectPageStateController
   // void selectApp(String packageName) {
   //   selectedAppsMap[packageName] = !selectedAppsMap[packageName]!;
