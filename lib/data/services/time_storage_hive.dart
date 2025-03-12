@@ -37,3 +37,53 @@ int getTempoTemporizador() {
 void setTempoTemporizador(int tempo) {
   boxTempo.put('temporizadorKey', tempo);
 }
+
+// --- Saved the current usage time of the monitored apps ---
+
+void setMapAppsCurrentTime(Map<String, int> appTimeMap) {
+  boxTempo.put('mapAppsCurrentTimeKey', appTimeMap);
+}
+
+Map<String, int> getMapAppsCurrentTime() {
+  return Map<String, int>.from(
+      boxTempo.get('mapAppsCurrentTimeKey', defaultValue: {}));
+}
+
+// -------------X----------------
+
+// --- Save a map of the monitored apps package name and if they are in acrescim mode ---
+
+void setMapAppAcrescimBool(
+    Map<String, bool> mapPackageNameAndAcrescimActivaded) {
+  boxTempo.put("mapAppAcrescimBoolKey", mapPackageNameAndAcrescimActivaded);
+}
+
+Map<String, bool> getMapAppAcrescimBool() {
+  return Map<String, bool>.from(
+      boxTempo.get("mapAppAcrescimBoolKey", defaultValue: <String, bool>{}));
+}
+
+// -------------X----------------
+
+// --- Save a map of monitored apps package name and the acrescim time
+
+void setMapAppTimeAcrescimLimit(
+    Map<String, int> mapPackageNameAndTimeAcrescim) {
+  boxTempo.put("mapAppTimeAcrescimKey", mapPackageNameAndTimeAcrescim);
+}
+
+Map<String, int> getMapAppTimeAcrescimLimit() {
+  return Map<String, int>.from(
+      boxTempo.get("mapAppTimeAcrescimKey", defaultValue: <String, int>{}));
+}
+
+// -------------X----------------
+
+void setMapAppAcrescimCurrentTime(Map<String, int> mapAppAcrescimCurrentTime) {
+  boxTempo.put("mapAppAcrescimCurrentTimeKey", mapAppAcrescimCurrentTime);
+}
+
+Map<String, int> getMapAppAcrescimCurrentTime() {
+  return Map<String, int>.from(boxTempo
+      .get("mapAppAcrescimCurrentTimeKey", defaultValue: <String, int>{}));
+}

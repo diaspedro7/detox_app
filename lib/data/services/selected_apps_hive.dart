@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 final boxSAS = Hive.box("selectedAppsStorage");
 
 // --- Save the all apps package name and if their are selected or not ---
+
 void setSelectedAppsMap(Map<String, bool> selectedAppsMap) {
   boxSAS.put("selectedAppsMap", Map<String, bool>.from(selectedAppsMap));
 }
@@ -13,7 +14,7 @@ Map<String, bool> getSelectedAppsMap() {
   return result;
 }
 
-// --- X ---
+// -------------X----------------
 
 // --- Save the apps package name that are monitored ---
 
@@ -27,7 +28,7 @@ Future<List<String>> getMonitoredApps() async {
   return result;
 }
 
-// --- X ---
+// -------------X----------------
 
 // --- Save a map of the apps package name and the time that they are monitored ---
 void setAppTimeMap(Map<String, int> appTimeMap) {
@@ -39,4 +40,4 @@ Map<String, int> getAppTimeMap() {
       boxSAS.get("appTimeMap", defaultValue: <String, int>{}));
 }
 
-// --- X ---
+// -------------X----------------

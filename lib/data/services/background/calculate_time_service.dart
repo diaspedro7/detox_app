@@ -38,20 +38,46 @@ Future<void> calculaTempo(
 
   debugPrint("MonitoredApps: $monitoredApps");
 
+  // if (monitoredApps.contains(result)) {
+  //   //If the last apps used is in the list
+  //   int tempo = getTempoSalvo(); //get the last saved time
+  //   tempo = tempo + 5; //add the time has passed
+  //   debugPrint("TempoSalvo: $tempo");
+  //   setTempoSalvo(tempo); //save the new time that has passed
+  //   debugPrint("Tempo de intervalo: ${getTempoDeIntervaloSomado()}");
+  //   if (tempo >= getAppTimeMap()[result]!) {
+  //     //if (tempo >= getTempoDeIntervaloSomado()) { //if the time has passed is greater than the estipulated time
+  //     //Vou botar o if do acrescimo aqui dentro
+  //     debugPrint("Entrou no passar o intervalo");
+  //     setTempoDeIntervaloSomado(tempo +
+  //         getTempoTemporizador()); //add the interval time and the time that has passed
+  //     exibirTela(service, result); //go to the alarm screen
+  //   }
+  // }
+
   if (monitoredApps.contains(result)) {
-    //If the last apps used is in the list
-    int tempo = getTempoSalvo(); //get the last saved time
-    tempo = tempo + 5; //add the time has passed
-    debugPrint("TempoSalvo: $tempo");
-    setTempoSalvo(tempo); //save the new time that has passed
-    debugPrint("Tempo de intervalo: ${getTempoDeIntervaloSomado()}");
-    if (tempo >= getAppTimeMap()[result]!) {
-      //if (tempo >= getTempoDeIntervaloSomado()) { //if the time has passed is greater than the estipulated time
-      //TODO: Add the logic to what is gonna do after the time has finished
-      debugPrint("Entrou no passar o intervalo");
-      setTempoDeIntervaloSomado(tempo +
-          getTempoTemporizador()); //add the interval time and the time that has passed
-      exibirTela(service); //go to the alarm screen
+    Map<String, int> mapAppsCurrentTime = getMapAppsCurrentTime();
+    int currentTime = mapAppsCurrentTime[result] ?? 0;
+    debugPrint("CurrentTime: $currentTime");
+    debugPrint("Time limit: ${getAppTimeMap()[result]}");
+    mapAppsCurrentTime[result] = currentTime + 5;
+    setMapAppsCurrentTime(mapAppsCurrentTime);
+    if (currentTime >= getAppTimeMap()[result]!) {
+      Map<String, bool> mapAppsAcrescimActivaded = getMapAppAcrescimBool();
+      bool thisAppActivated = mapAppsAcrescimActivaded[result] ?? false;
+
+      if (thisAppActivated) {
+        Map<String, int> mapAppsAcrescimCurrentTime =
+            getMapAppAcrescimCurrentTime();
+        int currentTimeAcrescim = mapAppsAcrescimCurrentTime[result] ?? 0;
+        mapAppsAcrescimCurrentTime[result] = currentTimeAcrescim + 5;
+        setMapAppAcrescimCurrentTime(mapAppsAcrescimCurrentTime);
+        if (currentTimeAcrescim >= getMapAppTimeAcrescimLimit()[result]!) {
+          exibirTela(service, result);
+        }
+      } else if (!thisAppActivated) {
+        exibirTela(service, result);
+      }
     }
   }
 }

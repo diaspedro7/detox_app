@@ -66,6 +66,23 @@ class AppViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<AppModel?> returnAppModel(String appPackageName) async {
+    List<AppInfo> installedApps =
+        await InstalledApps.getInstalledApps(false, true, true);
+
+    // Filter and add only the apps that are in our packageNames list
+    for (var app in installedApps) {
+      if (appPackageName.contains(app.packageName)) {
+        return AppModel(
+          appName: app.name,
+          appIcon: app.icon ?? Uint8List(0),
+          appPackageName: app.packageName,
+        );
+      }
+    }
+    return null;
+  }
+
   // Future<void> getSpecificApps(List<String> packageNames) async {
   //   monitoredApps.clear();
 

@@ -1,6 +1,5 @@
 import 'package:detox_app/app.dart';
 import 'package:detox_app/data/services/background/flutter_background_service.dart';
-import 'package:detox_app/data/services/background/push_screen_service.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
 import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
@@ -58,12 +57,15 @@ void main() async {
     }
   });
 
-  service.on('entrarDireto').listen((event) async {
-    if (event != null) {
-      bool varBool = event["isTrue"];
-      if (varBool) {
-        exibirTela(service);
-      }
-    }
-  });
+  // service.on('entrarDireto').listen((event) async {
+  //   if (event != null) {
+  //     bool varBool = event["isTrue"];
+  //     if (varBool) {
+  //       var channel = const MethodChannel("appsTimeUsage");
+
+  //       String resultText = await channel.invokeMethod('getTime');
+  //       exibirTela(service, resultText);
+  //     }
+  //   }
+  // });
 }

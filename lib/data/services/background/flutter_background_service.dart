@@ -54,16 +54,17 @@ void onStart(ServiceInstance service) async {
       debugPrint("Background rooooodando!---");
       try {
         debugPrint("Entrou no background");
-        if (telaJaExibida) {
-          debugPrint("Entrou direto");
-          service.invoke('entrarDireto', {'isTrue': true});
-        } else {
-          Timer? timer;
+        // if (telaJaExibida) {
+        //   debugPrint("Entrou direto");
+        //   service.invoke('entrarDireto', {'isTrue': true});
+        // }
+        // else {
+        Timer? timer;
 
-          //await obterTempo(service);
-          debugPrint("Entrou no else");
-          restartTimer(service, timer);
-        }
+        //await obterTempo(service);
+        debugPrint("Entrou no else");
+        restartTimer(service, timer);
+        //}
 
         debugPrint("O background continuou!!!");
       } catch (e) {

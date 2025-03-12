@@ -2,6 +2,7 @@
 
 import 'package:detox_app/data/services/permission_storage_hive.dart';
 import 'package:detox_app/features/detox/screens/add/add_apps_page.dart';
+import 'package:detox_app/features/detox/screens/alarm/alarm_page.dart';
 import 'package:detox_app/features/detox/screens/select_apps/select_apps_page.dart';
 import 'package:detox_app/features/permission/screens/verify_permission/verifica_permissao_page.dart';
 import 'package:detox_app/main.dart';
@@ -58,8 +59,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         "/add": (context) => const AddAppsPage(),
         "/select": (context) => const SelectAppsPage(),
       },
-      home:
-          //const AddAppsPage()
+      home: //const AlarmPage(packageName: "com.samsung.android.calendar")
           getPermission() == true
               ? const HomePage()
               : const VerificaPermissaoPage(),
