@@ -87,3 +87,16 @@ Map<String, int> getMapAppAcrescimCurrentTime() {
   return Map<String, int>.from(boxTempo
       .get("mapAppAcrescimCurrentTimeKey", defaultValue: <String, int>{}));
 }
+
+// --- Save the usage time of the monitored apps ---
+
+void setMapAppUsageTime(Map<String, int> mapAppUsageTime) {
+  boxTempo.put("mapAppUsageTimeKey", mapAppUsageTime);
+}
+
+Map<String, int> getMapAppUsageTime() {
+  return Map<String, int>.from(
+      boxTempo.get("mapAppUsageTimeKey", defaultValue: <String, int>{}));
+}
+
+// -------------X----------------

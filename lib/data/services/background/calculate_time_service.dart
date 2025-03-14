@@ -60,23 +60,35 @@ Future<void> calculaTempo(
     int currentTime = mapAppsCurrentTime[result] ?? 0;
     debugPrint("CurrentTime: $currentTime");
     debugPrint("Time limit: ${getAppTimeMap()[result]}");
-    mapAppsCurrentTime[result] = currentTime + 5;
-    setMapAppsCurrentTime(mapAppsCurrentTime);
+    if (!(currentTime >= getAppTimeMap()[result]!)) {
+      mapAppsCurrentTime[result] = currentTime + 5;
+      setMapAppsCurrentTime(mapAppsCurrentTime);
+    }
     if (currentTime >= getAppTimeMap()[result]!) {
+      debugPrint("CurrentTime maior do que o limit");
       Map<String, bool> mapAppsAcrescimActivaded = getMapAppAcrescimBool();
       bool thisAppActivated = mapAppsAcrescimActivaded[result] ?? false;
 
       if (thisAppActivated) {
+        debugPrint("ThisAppActivated: $thisAppActivated");
         Map<String, int> mapAppsAcrescimCurrentTime =
             getMapAppAcrescimCurrentTime();
         int currentTimeAcrescim = mapAppsAcrescimCurrentTime[result] ?? 0;
-        mapAppsAcrescimCurrentTime[result] = currentTimeAcrescim + 5;
-        setMapAppAcrescimCurrentTime(mapAppsAcrescimCurrentTime);
-        if (currentTimeAcrescim >= getMapAppTimeAcrescimLimit()[result]!) {
-          exibirTela(service, result);
+        if (!(currentTimeAcrescim >= getMapAppTimeAcrescimLimit()[result]!)) {
+          mapAppsAcrescimCurrentTime[result] = currentTimeAcrescim + 5;
+          setMapAppAcrescimCurrentTime(mapAppsAcrescimCurrentTime);
         }
-      } else if (!thisAppActivated) {
-        exibirTela(service, result);
+        debugPrint(
+            "CurrentTimeAcrescim: ${mapAppsAcrescimCurrentTime[result]}");
+        debugPrint(
+            "TimeAcrescimLimit: ${getMapAppTimeAcrescimLimit()[result]}");
+        if (currentTimeAcrescim >= getMapAppTimeAcrescimLimit()[result]!) {
+          debugPrint("CurrentTimeAcrescim maior do que o Acrescimlimit");
+          await exibirTela(service, result);
+        }
+      } else {
+        debugPrint("Entrou no else");
+        await exibirTela(service, result);
       }
     }
   }

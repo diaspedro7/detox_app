@@ -1,9 +1,9 @@
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
+import 'package:detox_app/features/detox/screens/alarm/alarm_page_two.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:detox_app/features/detox/screens/alarm/alarm_page.dart';
 import 'package:detox_app/main.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,7 @@ Future<void> exibirTela(
   if (app != null) {
     navigatorKey.currentState?.pushAndRemoveUntil(
         MaterialPageRoute(
-            builder: (context) => AlarmPage(
+            builder: (context) => AlarmPageTwo(
                   app: app,
                 )),
         (route) =>
