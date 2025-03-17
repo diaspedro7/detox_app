@@ -1,4 +1,4 @@
-import 'package:detox_app/features/detox/screens/home/widgets/app_tile.dart';
+import 'package:detox_app/features/detox/screens/select_apps/widgets/app_tile.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/custom_circular_progress_indicator.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';

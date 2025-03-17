@@ -2,9 +2,16 @@
 
 import 'package:detox_app/common/widgets/circular_slide_widget.dart';
 import 'package:detox_app/data/services/selected_apps_hive.dart';
+import 'package:detox_app/data/services/time_storage_hive.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/add_apps_button.dart';
+import 'package:detox_app/features/detox/screens/home/widgets/apps_count_display.dart';
+import 'package:detox_app/features/detox/screens/home/widgets/apps_gridview.dart';
+import 'package:detox_app/features/detox/screens/home/widgets/home_title.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/select_apps_expansion_tile.dart';
+import 'package:detox_app/features/detox/screens/home/widgets/switch.dart';
+import 'package:detox_app/features/detox/screens/home/widgets/switch_text.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
+import 'package:detox_app/features/detox/statecontrollers/home_page_statecontroller.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
@@ -42,65 +49,48 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: TColors.backgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.all(TSizes.lg),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Consumer<CircularSlideStateController>(
-                //   builder: (context, controller, child) =>
-                //       CircularSlide(controller: controller),
-                // ),
-                // SelectAppsExpansionTile(),
-                Text("Dopamini"),
-                SizedBox(height: 500),
-                Consumer<AppViewModel>(
-                  builder: (context, viewmodel, child) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Monitored apps: ${viewmodel.monitoredApps.length}"),
-                      const SizedBox(height: TSizes.spaceBtwItems),
-                      SizedBox(
-                        height: 60,
-                        child: Row(
-                          children: [
-                            AddAppsWidget(),
-                            Expanded(
-                              child: Consumer<AppViewModel>(
-                                  builder: (context, viewmodel, child) =>
-                                      ListView.builder(
-                                          // itemCount: viewmodel.monitoredApps.length,
-                                          itemCount:
-                                              viewmodel.monitoredApps.length,
-                                          scrollDirection: Axis.horizontal,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: TSizes.twelve),
-                                          itemBuilder: (context, index) {
-                                            return Container(
-                                                height: TSizes.addAppsWidget,
-                                                width: TSizes.addAppsWidget,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          TSizes.twelve),
-                                                ),
-                                                child: Image.memory(
-                                                  viewmodel.monitoredApps[index]
-                                                      .appIcon,
-                                                  width: TSizes.appsImage,
-                                                  height: TSizes.appsImage,
-                                                ));
-                                          })),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(TSizes.lg),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              HomeTitle(),
+              const SizedBox(height: TSizes.spaceBtwSections),
+
+              /// Switch part
+              Column(
+                children: [
+                  //Display text
+                  SwitchText(),
+                  SizedBox(height: TSizes.md),
+
+                  /// Switch Widget
+                  customSwitch(context),
+                ],
+              ),
+
+              const SizedBox(height: TSizes.spaceBtwSections),
+
+              /// Apps Counter
+              SizedBox(
+                height: TSizes.appsCounterDisplayHeight,
+                child: Column(
+                  children: [
+                    Consumer<AppViewModel>(
+                      builder: (context, viewmodel, child) =>
+                          AppsCounterDisplay(
+                        quantity: viewmodel.monitoredApps.length,
+                      ),
+                    ),
+
+                    /// GridView apps
+                    AppsGridView(),
+                  ],
                 ),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

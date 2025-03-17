@@ -1,6 +1,7 @@
 import 'package:detox_app/app.dart';
 import 'package:detox_app/data/services/background/flutter_background_service.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
+import 'package:detox_app/features/detox/statecontrollers/home_page_statecontroller.dart';
 import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/features/permission/statecontroller/permission_statecontroller.dart';
@@ -28,6 +29,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => PermissionStateController()),
     ChangeNotifierProvider(create: (_) => SelectAppsPageStatecontroller()),
     ChangeNotifierProvider(create: (_) => CircularSlideStateController()),
+    ChangeNotifierProvider(create: (_) => HomePageStateController()),
   ], child: const MyApp()));
 
   final service = FlutterBackgroundService();

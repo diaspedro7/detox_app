@@ -3,22 +3,20 @@ import 'package:android_intent_plus/flag.dart';
 import 'package:detox_app/data/services/time_storage_hive.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:detox_app/features/detox/screens/alarm/widgets/app_card.dart';
-import 'package:detox_app/main.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class AlarmPageTwo extends StatefulWidget {
-  const AlarmPageTwo({super.key, required this.app});
+class AlarmPage extends StatefulWidget {
+  const AlarmPage({super.key, required this.app});
 
   final AppModel app;
 
   @override
-  State<AlarmPageTwo> createState() => _AlarmPageTwoState();
+  State<AlarmPage> createState() => _AlarmPageState();
 }
 
-class _AlarmPageTwoState extends State<AlarmPageTwo>
+class _AlarmPageState extends State<AlarmPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;

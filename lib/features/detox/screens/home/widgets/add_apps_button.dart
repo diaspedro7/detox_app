@@ -19,7 +19,8 @@ class AddAppsWidget extends StatelessWidget {
         height: TSizes.addAppsWidget,
         width: TSizes.addAppsWidget,
         decoration: BoxDecoration(
-          color: TColors.grey.withValues(alpha: 0.5),
+          color: TColors.primary,
+          // color: TColors.grey.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(TSizes.twelve),
         ),
         child: const Icon(

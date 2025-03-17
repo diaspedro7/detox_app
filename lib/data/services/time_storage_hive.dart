@@ -100,3 +100,13 @@ Map<String, int> getMapAppUsageTime() {
 }
 
 // -------------X----------------
+
+// --- Save if the background service should activate ---
+
+void setActivateAppService(bool value) {
+  boxTempo.put("activateAppServiceKey", value);
+}
+
+bool getActivateAppService() {
+  return boxTempo.get("activateAppServiceKey", defaultValue: false);
+}

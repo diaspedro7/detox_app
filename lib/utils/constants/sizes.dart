@@ -80,6 +80,11 @@ class TSizes {
   static const double appsImage = 40.0;
   static const double selectAppsTileTextWidth = 250.0;
   static const double addAppsWidget = 50.0;
+  static const double appsCounterDisplayHeight = 260.0;
+
+  // Switch Widget
+  static const double switchHeight = 70.0;
+  static const double switchWidth = 140.0;
 
   //Request Permission Page
   static const double spaceBtwTitles = 90.0;
