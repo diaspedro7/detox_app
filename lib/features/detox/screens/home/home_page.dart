@@ -34,15 +34,6 @@ class _HomePageState extends State<HomePage> {
     if (getPermission() == false) {
       setPermission();
     }
-    _loadMonitoredApps();
-  }
-
-  Future<void> _loadMonitoredApps() async {
-    final apps = await getMonitoredApps();
-    if (mounted) {
-      final viewModel = Provider.of<AppViewModel>(context, listen: false);
-      await viewModel.getSpecificApps(apps);
-    }
   }
 
   @override

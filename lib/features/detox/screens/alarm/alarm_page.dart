@@ -2,7 +2,7 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
 import 'package:detox_app/data/services/time_storage_hive.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
-import 'package:detox_app/features/detox/screens/alarm/widgets/app_card.dart';
+import 'package:detox_app/common/widgets/app_card.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';

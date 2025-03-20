@@ -1,3 +1,5 @@
+import 'package:detox_app/data/services/selected_apps_hive.dart';
+import 'package:detox_app/features/detox/screens/details/app_details_page.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/add_apps_button.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/custom_circular_progress_indicator.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
@@ -10,13 +12,40 @@ class AppsGridView extends StatelessWidget {
     super.key,
   });
 
+  Future<bool> _loadMonitoredApps(BuildContext context) async {
+    try {
+      await Future.delayed(const Duration(seconds: 2)); // Delay intencional
+      final apps = await getMonitoredApps();
+      if (!context.mounted) return false;
+
+      final viewModel = Provider.of<AppViewModel>(context, listen: false);
+      await viewModel.getSpecificApps(apps);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      child: Consumer<AppViewModel>(
-        builder: (context, viewmodel, child) => viewmodel.monitoredApps.isEmpty
-            ? const CustomCircularProgressIndicator()
-            : GridView.builder(
+      child: FutureBuilder<bool>(
+          future: _loadMonitoredApps(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CustomCircularProgressIndicator(),
+              );
+            }
+
+            if (snapshot.hasError || snapshot.data == false) {
+              return const Center(
+                child: Text('Error loading apps'),
+              );
+            }
+
+            return Consumer<AppViewModel>(
+              builder: (context, viewmodel, child) => GridView.builder(
                 padding: const EdgeInsets.only(
                     top: TSizes.md, left: TSizes.sm, right: TSizes.sm),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -33,17 +62,39 @@ class AppsGridView extends StatelessWidget {
                     duration: Duration(milliseconds: 200 + (index * 100)),
                     curve: Curves.easeOutCubic,
                     builder: (context, value, child) {
-                      return index == 0
-                          ? const AddAppsWidget()
-                          : Image.memory(
-                              viewmodel.monitoredApps[index - 1].appIcon,
-                              fit: BoxFit.cover,
-                            );
+                      debugPrint(
+                          "Tamanho da lista: ${viewmodel.monitoredApps.length}");
+                      if (index == 0) {
+                        return const AddAppsWidget();
+                      }
+
+                      return GestureDetector(
+                        onTap: () async {
+                          final needsUpdate = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AppDetailsPage(
+                                        app: viewmodel.monitoredApps[index - 1],
+                                      )));
+
+                          if (needsUpdate == true && context.mounted) {
+                            final viewModel = Provider.of<AppViewModel>(context,
+                                listen: false);
+                            await viewModel
+                                .getSpecificApps(await getMonitoredApps());
+                          }
+                        },
+                        child: Image.memory(
+                          viewmodel.monitoredApps[index - 1].appIcon,
+                          fit: BoxFit.cover,
+                        ),
+                      );
                     },
                   );
                 },
               ),
-      ),
+            );
+          }),
     );
   }
 }

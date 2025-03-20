@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:detox_app/common/widgets/floating_button.dart';
 import 'package:detox_app/features/detox/screens/select_apps/widgets/app_tile.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/custom_circular_progress_indicator.dart';
 import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
@@ -61,50 +62,16 @@ class _SelectAppsPageState extends State<SelectAppsPage>
     final controller = context.watch<SelectAppsPageStatecontroller>();
 
     return Scaffold(
-      floatingActionButton: ScaleTransition(
-        scale: _fadeAnimation,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                TColors.primary,
-                TColors.primary.withValues(alpha: 0.8),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-            boxShadow: [
-              BoxShadow(
-                color: TColors.primary.withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: FloatingActionButton.extended(
-            onPressed: () async {
-              viewmodel.recieveSelectedApps(controller.selectedAppsMap);
-              await Future.delayed(const Duration(seconds: 2));
-              if (viewmodel.selectedAppsMap.isNotEmpty) {
-                Navigator.pop(context);
-              }
-            },
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            label: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: TSizes.sm),
-              child: Text(
-                'Save Selection',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: TColors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-            ),
-            icon: const Icon(Icons.check_rounded, color: TColors.white),
-          ),
-        ),
+      floatingActionButton: FloatingButton(
+        fadeAnimation: _fadeAnimation,
+        buttonText: 'Save Selection',
+        onPressed: () async {
+          viewmodel.recieveSelectedApps(controller.selectedAppsMap);
+          await Future.delayed(const Duration(seconds: 2));
+          if (viewmodel.selectedAppsMap.isNotEmpty) {
+            Navigator.pop(context);
+          }
+        },
       ),
       body: Container(
         decoration: BoxDecoration(

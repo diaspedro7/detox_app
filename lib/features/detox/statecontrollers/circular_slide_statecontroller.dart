@@ -30,4 +30,9 @@ class CircularSlideStateController extends ChangeNotifier {
     notifyListeners();
     setIntervalTime(radialValue.ceil());
   }
+
+  void valueReset() {
+    radialValue = 10.0;
+    notifyListeners();
+  }
 }

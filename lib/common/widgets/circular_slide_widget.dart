@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 class CircularSlide extends StatelessWidget {
   const CircularSlide({
     super.key,
-    this.controller,
+    required this.controller,
   });
 
   // ignore: prefer_typing_uninitialized_variables

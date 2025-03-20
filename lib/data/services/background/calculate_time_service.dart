@@ -30,30 +30,9 @@ Future<void> obterTempo(ServiceInstance service) async {
 
 Future<void> calculaTempo(
     String result, FlutterBackgroundService service) async {
-  List<String> monitoredApps = getSelectedAppsMap()
-      .entries
-      .where((entry) => entry.value) // Filtra apenas os valores `true`
-      .map((entry) => entry.key) // Pega as chaves correspondentes
-      .toList();
+  List<String> monitoredApps = await getMonitoredApps();
 
   debugPrint("MonitoredApps: $monitoredApps");
-
-  // if (monitoredApps.contains(result)) {
-  //   //If the last apps used is in the list
-  //   int tempo = getTempoSalvo(); //get the last saved time
-  //   tempo = tempo + 5; //add the time has passed
-  //   debugPrint("TempoSalvo: $tempo");
-  //   setTempoSalvo(tempo); //save the new time that has passed
-  //   debugPrint("Tempo de intervalo: ${getTempoDeIntervaloSomado()}");
-  //   if (tempo >= getAppTimeMap()[result]!) {
-  //     //if (tempo >= getTempoDeIntervaloSomado()) { //if the time has passed is greater than the estipulated time
-  //     //Vou botar o if do acrescimo aqui dentro
-  //     debugPrint("Entrou no passar o intervalo");
-  //     setTempoDeIntervaloSomado(tempo +
-  //         getTempoTemporizador()); //add the interval time and the time that has passed
-  //     exibirTela(service, result); //go to the alarm screen
-  //   }
-  // }
 
   if (monitoredApps.contains(result)) {
     Map<String, int> mapAppsCurrentTime = getMapAppsCurrentTime();

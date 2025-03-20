@@ -17,6 +17,7 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 250.0,
       margin: const EdgeInsets.symmetric(
         horizontal: TSizes.defaultSpace,
         vertical: TSizes.sm,
@@ -54,11 +55,15 @@ class AppCard extends StatelessWidget {
                 : const Icon(Icons.android, size: 32, color: Colors.grey),
           ),
           const SizedBox(width: TSizes.spaceBtwItems),
-          Text(
-            appName,
-            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  color: TColors.dark,
-                ),
+          Flexible(
+            child: Text(
+              appName,
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: TColors.dark,
+                  ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
         ],
       ),
