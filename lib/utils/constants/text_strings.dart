@@ -6,10 +6,10 @@ class TTexts {
   static const String minAbv = "min";
   static const String minutes = "minutes";
   static const String seconds = "seconds";
-  static const String two = "seconds";
-  static const String five = "seconds";
-  static const String ten = "seconds";
-  static const String fifteen = "seconds";
+  static const String two = "2";
+  static const String five = "5";
+  static const String ten = "10";
+  static const String fifteen = "15";
 
   static const String ok = "ok";
   static const String timesUp = "Time's Up!";

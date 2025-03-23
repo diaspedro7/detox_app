@@ -81,6 +81,7 @@ void showAddAppsModal(BuildContext context) {
                           await viewmodel.getMonitoredAppsLocalDatabase(),
                           controller.radialValue.ceil() * TSizes.oneMin);
                       selectPageController.mapClear();
+                      viewmodel.clearAppsList();
                       debugPrint("MapAppTime: ${getAppTimeMap()}");
                       debugPrint("Salvado com sucesso");
                       await Future.delayed(const Duration(seconds: 3));

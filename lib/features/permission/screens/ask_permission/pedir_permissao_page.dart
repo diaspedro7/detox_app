@@ -1,6 +1,5 @@
 // ignore_for_file: await_only_futures
 
-import 'package:android_power_manager/android_power_manager.dart';
 import 'package:detox_app/features/permission/statecontroller/permission_statecontroller.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
@@ -109,29 +108,18 @@ Future<bool> requestOverlayPermission() async {
 }
 
 Future<bool> init() async {
-  var status = await Permission.ignoreBatteryOptimizations.status;
-  debugPrint("status: $status");
-  if (status.isGranted) {
-    debugPrint(
-        "isIgnoring: ${(await AndroidPowerManager.isIgnoringBatteryOptimizations)}");
-    final isIgnoring = await AndroidPowerManager.isIgnoringBatteryOptimizations;
+  try {
+    var status = await Permission.ignoreBatteryOptimizations.status;
+    debugPrint("status: $status");
 
-    if (isIgnoring != null && !isIgnoring) {
-      AndroidPowerManager.requestIgnoreBatteryOptimizations();
-      return true;
+    if (!status.isGranted) {
+      final result = await Permission.ignoreBatteryOptimizations.request();
+      return result.isGranted;
     }
-  } else {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.ignoreBatteryOptimizations,
-    ].request();
-    debugPrint(
-        "permission value: ${statuses[Permission.ignoreBatteryOptimizations]}");
-    if (statuses[Permission.ignoreBatteryOptimizations]!.isGranted) {
-      AndroidPowerManager.requestIgnoreBatteryOptimizations();
-      return true;
-    } else {
-      return false;
-    }
+
+    return true;
+  } catch (e) {
+    debugPrint("Error requesting battery optimization: $e");
+    return false;
   }
-  return true;
 }

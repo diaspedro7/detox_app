@@ -118,8 +118,9 @@ class AppViewModel extends ChangeNotifier {
   Future<void> setMonitoredAppsLocalDatabase() async {
     List<String> saveAppsPackageName = [];
     //get checked apps
-    var newApps =
-        appsList.where((app) => selectedAppsMap[app.appPackageName]!).toList();
+    var newApps = appsList
+        .where((app) => selectedAppsMap[app.appPackageName] == true)
+        .toList();
 
     // AAdd the apps to the monitoredApps if they are not already there
     for (var app in newApps) {
@@ -158,6 +159,7 @@ class AppViewModel extends ChangeNotifier {
 
   void clearAppsList() {
     appsList.clear();
+    selectedAppsMap.clear();
     notifyListeners();
   }
 }
