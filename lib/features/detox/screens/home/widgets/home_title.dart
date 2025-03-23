@@ -1,5 +1,6 @@
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
 class HomeTitle extends StatelessWidget {
@@ -21,7 +22,7 @@ class HomeTitle extends StatelessWidget {
             ),
             const SizedBox(width: TSizes.sm),
             Text(
-              'Dopamini',
+              TTexts.appName,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: TColors.primary,
                     fontWeight: FontWeight.bold,
@@ -32,7 +33,7 @@ class HomeTitle extends StatelessWidget {
         ),
         const SizedBox(height: TSizes.sm),
         Text(
-          'Take control of your digital well-being',
+          TTexts.slogan,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: TColors.primary.withValues(alpha: 0.7),
                 letterSpacing: 0.5,

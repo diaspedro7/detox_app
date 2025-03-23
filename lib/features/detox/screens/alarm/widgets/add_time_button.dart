@@ -1,4 +1,5 @@
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
 class AddTimeButton extends StatelessWidget {
@@ -26,7 +27,7 @@ class AddTimeButton extends StatelessWidget {
           ),
         ),
         child: Text(
-          "$minutes min",
+          "$minutes ${TTexts.minAbv}",
           style: const TextStyle(fontWeight: FontWeight.w500),
         ),
       ),

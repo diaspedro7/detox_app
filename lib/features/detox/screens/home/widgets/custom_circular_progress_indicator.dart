@@ -1,4 +1,5 @@
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
 class CustomCircularProgressIndicator extends StatelessWidget {
@@ -37,7 +38,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
             ),
           ),
           const SizedBox(height: TSizes.spaceBtwItems),
-          Text("Loading...", style: Theme.of(context).textTheme.titleMedium),
+          Text(TTexts.loading, style: Theme.of(context).textTheme.titleMedium),
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:detox_app/features/detox/screens/home/widgets/add_apps_button.da
 import 'package:detox_app/features/detox/screens/home/widgets/custom_circular_progress_indicator.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +41,7 @@ class AppsGridView extends StatelessWidget {
 
             if (snapshot.hasError || snapshot.data == false) {
               return const Center(
-                child: Text('Error loading apps'),
+                child: Text(TTexts.errorLoadingApps),
               );
             }
 
@@ -54,42 +55,35 @@ class AppsGridView extends StatelessWidget {
                     crossAxisSpacing: TSizes.gridViewSpacing,
                     mainAxisSpacing: TSizes.gridViewSpacing,
                     childAspectRatio: 1.0,
-                    mainAxisExtent: 55),
+                    mainAxisExtent: TSizes.gridViewAppSize),
                 itemCount: viewmodel.monitoredApps.length + 1,
                 itemBuilder: (context, index) {
-                  return TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    duration: Duration(milliseconds: 200 + (index * 100)),
-                    curve: Curves.easeOutCubic,
-                    builder: (context, value, child) {
-                      debugPrint(
-                          "Tamanho da lista: ${viewmodel.monitoredApps.length}");
-                      if (index == 0) {
-                        return const AddAppsWidget();
+                  debugPrint(
+                      "Tamanho da lista: ${viewmodel.monitoredApps.length}");
+                  if (index == 0) {
+                    return const AddAppsWidget();
+                  }
+
+                  return GestureDetector(
+                    onTap: () async {
+                      final needsUpdate = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AppDetailsPage(
+                                    app: viewmodel.monitoredApps[index - 1],
+                                  )));
+
+                      if (needsUpdate == true && context.mounted) {
+                        final viewModel =
+                            Provider.of<AppViewModel>(context, listen: false);
+                        await viewModel
+                            .getSpecificApps(await getMonitoredApps());
                       }
-
-                      return GestureDetector(
-                        onTap: () async {
-                          final needsUpdate = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AppDetailsPage(
-                                        app: viewmodel.monitoredApps[index - 1],
-                                      )));
-
-                          if (needsUpdate == true && context.mounted) {
-                            final viewModel = Provider.of<AppViewModel>(context,
-                                listen: false);
-                            await viewModel
-                                .getSpecificApps(await getMonitoredApps());
-                          }
-                        },
-                        child: Image.memory(
-                          viewmodel.monitoredApps[index - 1].appIcon,
-                          fit: BoxFit.cover,
-                        ),
-                      );
                     },
+                    child: Image.memory(
+                      viewmodel.monitoredApps[index - 1].appIcon,
+                      fit: BoxFit.cover,
+                    ),
                   );
                 },
               ),

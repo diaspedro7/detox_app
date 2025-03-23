@@ -7,6 +7,7 @@ class TSizes {
   static const double ten = 10.0;
   static const double twelve = 12.0;
   static const double md = 16.0;
+  static const double twty = 20.0;
   static const double lg = 24.0;
   static const double xl = 32.0;
 
@@ -81,6 +82,9 @@ class TSizes {
   static const double selectAppsTileTextWidth = 250.0;
   static const double addAppsWidget = 50.0;
   static const double appsCounterDisplayHeight = 260.0;
+  static const double showModalMaxHeight = 700.0;
+  static const double elevatedButtonHeight = 50.0;
+  static const double gridViewAppSize = 55.0;
 
   // Switch Widget
   static const double switchHeight = 70.0;
@@ -88,4 +92,19 @@ class TSizes {
 
   //Request Permission Page
   static const double spaceBtwTitles = 90.0;
+
+  //Time
+  static const int oneMin = 60;
+  static const int twoMin = 120;
+  static const int fiveMin = 300;
+  static const int tenMin = 600;
+  static const int fifteenMin = 1500;
+
+  //App details page
+  static const double textWidth = 250.0;
+  static const double spaceBtwAppCard = 100.0;
+
+  //Alarm Page
+  static const double titleIcon = 80.0;
+  static const double usageFontSize = 21.0;
 }

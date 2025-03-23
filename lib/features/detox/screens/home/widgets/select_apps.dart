@@ -1,5 +1,6 @@
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
 class SelectApps extends StatelessWidget {
@@ -21,15 +22,14 @@ class SelectApps extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Select Apps",
+              TTexts.selectApps,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const Padding(
               padding: EdgeInsets.only(right: TSizes.ten),
               child: Icon(
-                Icons.chevron_right,
+                Icons.add_rounded,
                 size: TSizes.iconMd,
-                // size: TSizes.iconSm,
                 color: TColors.black,
               ),
             ),

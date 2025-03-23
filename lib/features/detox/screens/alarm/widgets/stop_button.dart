@@ -1,5 +1,6 @@
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 
@@ -41,7 +42,7 @@ class StopButton extends StatelessWidget {
           ),
           SizedBox(width: TSizes.sm),
           Text(
-            "Ok",
+            TTexts.ok,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ],

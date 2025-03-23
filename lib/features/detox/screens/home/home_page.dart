@@ -7,7 +7,6 @@ import 'package:detox_app/features/detox/screens/home/widgets/add_apps_button.da
 import 'package:detox_app/features/detox/screens/home/widgets/apps_count_display.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/apps_gridview.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/home_title.dart';
-import 'package:detox_app/features/detox/screens/home/widgets/select_apps_expansion_tile.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/switch.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/switch_text.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';

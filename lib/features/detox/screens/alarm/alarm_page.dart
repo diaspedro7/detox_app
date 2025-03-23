@@ -1,10 +1,13 @@
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
+import 'package:detox_app/common/widgets/gradient_background_container.dart';
 import 'package:detox_app/data/services/time_storage_hive.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:detox_app/common/widgets/app_card.dart';
+import 'package:detox_app/features/detox/screens/alarm/widgets/title_alarm_page.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
 class AlarmPage extends StatefulWidget {
@@ -75,68 +78,19 @@ class _AlarmPageState extends State<AlarmPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            TColors.primary,
-            TColors.primary.withValues(alpha: 0.8),
-            TColors.backgroundColor,
-          ],
-          stops: const [0.0, 0.3, 0.45],
-        ),
-      ),
+        body: GradientBackgroundContainer(
       child: FadeTransition(
         opacity: _fadeAnimation,
         child: Column(
           children: [
-            SafeArea(
+            const SafeArea(
               child: Padding(
-                padding: const EdgeInsets.only(
+                padding: EdgeInsets.only(
                     top: TSizes.md,
                     left: TSizes.twelve,
                     right: TSizes.twelve,
                     bottom: TSizes.xs),
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.timer_off_rounded,
-                        size: 80,
-                        color: Colors.white.withValues(alpha: 0.9),
-                      ),
-                      const SizedBox(height: TSizes.spaceBtwItems / 2),
-                      Text(
-                        "Time's Up!",
-                        style:
-                            Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      const SizedBox(height: TSizes.spaceBtwItems),
-                      Text(
-                        "You've reached your app usage limit.",
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.white.withValues(alpha: 0.9),
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                      const SizedBox(height: TSizes.ten),
-                      Text(
-                        "You can choose to stop using this app for today or extend your session.",
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.white.withValues(alpha: 0.9),
-                              fontWeight: FontWeight.w500,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
+                child: TitleAlarmPage(),
               ),
             ),
             Expanded(
@@ -150,7 +104,7 @@ class _AlarmPageState extends State<AlarmPage>
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 10,
+                      blurRadius: TSizes.ten,
                       offset: const Offset(0, -5),
                     ),
                   ],
@@ -167,11 +121,11 @@ class _AlarmPageState extends State<AlarmPage>
                       ),
                       const SizedBox(height: TSizes.spaceBtwItems),
                       Text(
-                        "Usage time: ${getMapAppUsageTime()[widget.app.appPackageName]} minutes",
+                        "${TTexts.usageTime} ${getMapAppUsageTime()[widget.app.appPackageName]} ${TTexts.minutes}",
                         style: Theme.of(context)
                             .textTheme
                             .headlineSmall
-                            ?.copyWith(fontSize: 21.0),
+                            ?.copyWith(fontSize: TSizes.usageFontSize),
                       ),
                       const SizedBox(height: TSizes.spaceBtwSections),
                       Container(
@@ -183,7 +137,7 @@ class _AlarmPageState extends State<AlarmPage>
                         child: Column(
                           children: [
                             Text(
-                              "Need more time?",
+                              TTexts.needMoreTime,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge
@@ -193,7 +147,7 @@ class _AlarmPageState extends State<AlarmPage>
                                   ),
                             ),
                             const SizedBox(height: TSizes.sm),
-                            _buildTimeExtensionGrid(),
+                            buildTimeExtensionGrid(),
                           ],
                         ),
                       ),
@@ -210,7 +164,7 @@ class _AlarmPageState extends State<AlarmPage>
                             );
                             await intent.launch();
                           },
-                          child: const Text("Ok"),
+                          child: const Text(TTexts.ok),
                         ),
                       ),
                     ],
@@ -224,12 +178,12 @@ class _AlarmPageState extends State<AlarmPage>
     ));
   }
 
-  Widget _buildTimeExtensionGrid() {
+  Widget buildTimeExtensionGrid() {
     final List<Map<String, dynamic>> timeOptions = [
-      {"minutes": "2", "seconds": 120},
-      {"minutes": "5", "seconds": 300},
-      {"minutes": "10", "seconds": 600},
-      {"minutes": "15", "seconds": 900},
+      {TTexts.minutes: TTexts.two, TTexts.seconds: TSizes.twoMin},
+      {TTexts.minutes: TTexts.five, TTexts.seconds: TSizes.fiveMin},
+      {TTexts.minutes: TTexts.ten, TTexts.seconds: TSizes.tenMin},
+      {TTexts.minutes: TTexts.fifteen, TTexts.seconds: TSizes.fifteenMin},
     ];
 
     return GridView.builder(
@@ -244,15 +198,15 @@ class _AlarmPageState extends State<AlarmPage>
       ),
       itemCount: timeOptions.length,
       itemBuilder: (context, index) {
-        return _buildTimeButton(
-            minutes: timeOptions[index]["minutes"]!,
-            seconds: timeOptions[index]["seconds"]!,
+        return buildTimeButton(
+            minutes: timeOptions[index][TTexts.minutes]!,
+            seconds: timeOptions[index][TTexts.seconds]!,
             index: index);
       },
     );
   }
 
-  Widget _buildTimeButton(
+  Widget buildTimeButton(
       {required String minutes, required int seconds, required int index}) {
     return Container(
       padding: EdgeInsets.zero,
@@ -292,7 +246,7 @@ class _AlarmPageState extends State<AlarmPage>
           borderRadius: BorderRadius.circular(TSizes.buttonRadius),
           child: Center(
             child: Text(
-              "+$minutes min",
+              "+$minutes ${TTexts.minAbv}",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: TColors.primary,
                     fontWeight: FontWeight.w600,

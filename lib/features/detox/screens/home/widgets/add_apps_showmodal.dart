@@ -6,6 +6,7 @@ import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontr
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +14,7 @@ void showAddAppsModal(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    //scrollControlDisabledMaxHeightRatio: 300,
-    constraints: const BoxConstraints(maxHeight: 700),
+    constraints: const BoxConstraints(maxHeight: TSizes.showModalMaxHeight),
     backgroundColor: TColors.backgroundColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(TSizes.xl)),
@@ -29,16 +29,15 @@ void showAddAppsModal(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Add application",
+                  TTexts.addApplication,
                   style: Theme.of(context).textTheme.headlineLarge,
                   textAlign: TextAlign.start,
                 ),
               ],
             ),
-            const SizedBox(height: 5.0),
+            const SizedBox(height: TSizes.xs),
 
-            Text(
-                "Choose the apps to monitor and set a time limit for their usage.",
+            Text(TTexts.chooseAppToMonitor,
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge!
@@ -56,7 +55,6 @@ void showAddAppsModal(BuildContext context) {
                     child: const SelectApps()),
               ),
             ),
-            // const SizedBox(height: 16),
             Consumer<CircularSlideStateController>(
               builder: (context, controller, child) =>
                   CircularSlide(controller: controller),
@@ -70,9 +68,10 @@ void showAddAppsModal(BuildContext context) {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: TColors.primary,
                       foregroundColor: TColors.white,
-                      minimumSize: const Size(double.infinity, 50),
+                      minimumSize: const Size(
+                          double.infinity, TSizes.elevatedButtonHeight),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(TSizes.twelve),
                       ),
                     ),
                     onPressed: () async {
@@ -80,22 +79,26 @@ void showAddAppsModal(BuildContext context) {
                       await viewmodel.setMonitoredAppsLocalDatabase();
                       viewmodel.setMapAppsTime(
                           await viewmodel.getMonitoredAppsLocalDatabase(),
-                          controller.radialValue.ceil() * 60);
+                          controller.radialValue.ceil() * TSizes.oneMin);
                       selectPageController.mapClear();
                       debugPrint("MapAppTime: ${getAppTimeMap()}");
                       debugPrint("Salvado com sucesso");
                       await Future.delayed(const Duration(seconds: 3));
                     },
-                    child: const Text(
-                      "Save Changes",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    child: Text(
+                      TTexts.saveChanges,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .apply(color: TColors.white),
+                      // style:
+                      //     TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: TSizes.md),
           ],
         ),
       ),

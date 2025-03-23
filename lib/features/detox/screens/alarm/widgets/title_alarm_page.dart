@@ -1,4 +1,5 @@
 import 'package:detox_app/utils/constants/sizes.dart';
+import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
 class TitleAlarmPage extends StatelessWidget {
@@ -8,30 +9,42 @@ class TitleAlarmPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Icon(
-          Icons.timer_off_rounded,
-          size: 80,
-          color: Colors.white,
-        ),
-        const SizedBox(height: TSizes.spaceBtwItems),
-        Text(
-          "Time's Up!",
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-        const SizedBox(height: TSizes.sm),
-        Text(
-          "You've reached your app usage limit",
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.white.withValues(alpha: 0.9),
-              ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.timer_off_rounded,
+            size: TSizes.titleIcon,
+            color: Colors.white.withValues(alpha: 0.9),
+          ),
+          const SizedBox(height: TSizes.spaceBtwItems / 2),
+          Text(
+            TTexts.timesUp,
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: TSizes.spaceBtwItems),
+          Text(
+            TTexts.reachedUsageLimit,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+          const SizedBox(height: TSizes.ten),
+          Text(
+            TTexts.chooseOptions,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  fontWeight: FontWeight.w500,
+                ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }
