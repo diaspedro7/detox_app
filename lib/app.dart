@@ -32,6 +32,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused) {
       debugPrint("Paused funcionou");
       if (getActivateAppService()) {
+        resetDailyUsageTime();
         service.invoke('setAsBackground');
       }
     }

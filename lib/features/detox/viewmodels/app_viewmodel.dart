@@ -11,6 +11,8 @@ class AppViewModel extends ChangeNotifier {
 
   List<AppModel> monitoredApps = [];
 
+  bool _isLoading = false;
+
   Future<void> getAppsList() async {
     //get all the apps from the device
     List<AppInfo> installedApps =
@@ -44,26 +46,32 @@ class AppViewModel extends ChangeNotifier {
   }
 
   Future<void> getSpecificApps(List<String> packageNames) async {
-    monitoredApps.clear();
+    if (_isLoading) return;
 
-    // Get all installed apps at once
-    List<AppInfo> installedApps =
-        await InstalledApps.getInstalledApps(false, true, true);
+    try {
+      _isLoading = true;
+      monitoredApps.clear();
+      notifyListeners();
 
-    // Filter and add only the apps that are in our packageNames list
-    for (var app in installedApps) {
-      if (packageNames.contains(app.packageName)) {
-        monitoredApps.add(
-          AppModel(
-            appName: app.name,
-            appIcon: app.icon ?? Uint8List(0),
-            appPackageName: app.packageName,
-          ),
-        );
+      // Get all installed apps at once
+      List<AppInfo> installedApps =
+          await InstalledApps.getInstalledApps(false, true, true);
+
+      // Filter and add only the apps that are in our packageNames list
+      for (var app in installedApps) {
+        if (packageNames.contains(app.packageName)) {
+          monitoredApps.add(
+            AppModel(
+              appName: app.name,
+              appIcon: app.icon ?? Uint8List(0),
+              appPackageName: app.packageName,
+            ),
+          );
+        }
       }
+    } finally {
+      notifyListeners();
     }
-
-    notifyListeners();
   }
 
   Future<AppModel?> returnAppModel(String appPackageName) async {

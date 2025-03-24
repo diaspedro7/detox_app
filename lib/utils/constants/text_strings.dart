@@ -11,7 +11,7 @@ class TTexts {
   static const String ten = "10";
   static const String fifteen = "15";
 
-  static const String ok = "ok";
+  static const String ok = "Ok";
   static const String timesUp = "Time's Up!";
   static const String reachedUsageLimit =
       "You've reached your app usage limit.";

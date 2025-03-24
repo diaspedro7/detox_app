@@ -110,3 +110,30 @@ void setActivateAppService(bool value) {
 bool getActivateAppService() {
   return boxTempo.get("activateAppServiceKey", defaultValue: false);
 }
+
+// -------------X----------------
+
+// --- Save the current day ---
+
+void setCurrentDay(int day) {
+  boxTempo.put("currentDayKey", day);
+}
+
+int getCurrentDay() {
+  return boxTempo.get("currentDayKey", defaultValue: 0);
+}
+
+// -------------X----------------
+
+// --- Reset daily the usage time and acrescim time of the monitored apps ---
+
+void resetDailyUsageTime() {
+  if (DateTime.now().day != getCurrentDay()) {
+    setMapAppUsageTime(<String, int>{});
+    setMapAppAcrescimCurrentTime(<String, int>{});
+    setMapAppTimeAcrescimLimit(<String, int>{});
+    setCurrentDay(DateTime.now().day);
+  }
+}
+
+// -------------X----------------
