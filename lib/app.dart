@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
 
+import 'package:detox_app/data/services/background/flutter_background_service.dart';
 import 'package:detox_app/data/services/permission_storage_hive.dart';
 import 'package:detox_app/data/services/time_storage_hive.dart';
 import 'package:detox_app/features/detox/screens/select_apps/select_apps_page.dart';
@@ -29,22 +30,35 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final service = FlutterBackgroundService();
 
+    // service.invoke('setAsForeground');
+
+    if (state == AppLifecycleState.resumed) {
+      debugPrint("Resumed funcionou");
+      service.invoke('desligarTimer');
+      service.invoke('setAsForeground');
+      service.invoke('pauseMonitoring', {'paused': true});
+    }
+
     if (state == AppLifecycleState.paused) {
       debugPrint("Paused funcionou");
       if (getActivateAppService()) {
         resetDailyUsageTime();
         service.invoke('setAsBackground');
+        service.invoke('pauseMonitoring', {'paused': false});
+
+        // showNotification();
+
+        // E também envie o evento para o serviço
+        // final service = FlutterBackgroundService();
+        // service.invoke('appClosed');
       }
-    }
-    if (state == AppLifecycleState.resumed) {
-      debugPrint("Resumed funcionou");
-      service.invoke('desligarTimer');
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
 

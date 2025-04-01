@@ -1,18 +1,26 @@
 import 'dart:async';
-
+import 'dart:ui';
 import 'package:detox_app/data/services/background/calculate_time_service.dart';
+import 'package:detox_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
   await service.configure(
-      iosConfiguration: IosConfiguration(),
-      androidConfiguration: AndroidConfiguration(
-        onStart: onStart,
-        isForegroundMode: false,
-      ));
+    androidConfiguration: AndroidConfiguration(
+      onStart: onStart,
+      autoStart: true,
+      autoStartOnBoot: true,
+      isForegroundMode: true,
+      foregroundServiceNotificationId: 888,
+      initialNotificationTitle: 'Stay Mindful',
+      initialNotificationContent: 'Taking care of your digital health.',
+    ),
+    iosConfiguration: IosConfiguration(),
+  );
 
   await service.startService();
   // Inicia o serviço
@@ -28,6 +36,9 @@ Future<void> initializeService() async {
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
+  DartPluginRegistrant
+      .ensureInitialized(); // Registra plugins no Isolate do serviço
+  WidgetsFlutterBinding.ensureInitialized();
   bool telaJaExibida = false;
 
   service.on('telaJaExibida').listen((event) {
@@ -45,12 +56,12 @@ void onStart(ServiceInstance service) async {
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen(
       (event) {
-        service.setAsForegroundService();
+        service.setAsBackgroundService();
       },
     );
 
     service.on('setAsBackground').listen((event) async {
-      service.setAsBackgroundService();
+      service.setAsForegroundService();
       debugPrint("Background rooooodando!---");
       try {
         debugPrint("Entrou no background");
@@ -63,7 +74,7 @@ void onStart(ServiceInstance service) async {
 
         //await obterTempo(service);
         debugPrint("Entrou no else");
-        restartTimer(service, timer);
+        restartTimer(timer, service);
         //}
 
         debugPrint("O background continuou!!!");
@@ -73,7 +84,41 @@ void onStart(ServiceInstance service) async {
     });
   }
 
+  service.on('appClosed').listen((event) async {
+    await showNotification();
+  });
+
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
+}
+
+// Future<void> startNativeService() async {
+//   const platform = MethodChannel('appsTimeUsage');
+//   try {
+//     await platform.invokeMethod('startBackgroundService');
+//   } catch (e) {
+//     debugPrint("Erro ao iniciar serviço nativo: $e");
+//   }
+// }
+
+const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+  'detox_channel', // ID do canal
+  'Detox Notifications', // Nome do canal
+  channelDescription: 'Notificações do app Detox',
+  importance: Importance.high,
+  priority: Priority.high,
+  ticker: 'ticker',
+);
+
+const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+Future<void> showNotification() async {
+  await flutterLocalNotificationsPlugin.show(
+    0, // ID único baseado no tempo atual
+    'Detox App', // Título
+    'O app foi fechado. Volte para continuar monitorando!', // Corpo da notificação
+    platformChannelSpecifics,
+  );
 }

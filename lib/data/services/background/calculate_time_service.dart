@@ -7,16 +7,46 @@ import 'package:detox_app/data/services/time_storage_hive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 
-void restartTimer(ServiceInstance service, Timer? timer) async {
+// void restartTimer(ServiceInstance service, Timer? timer) async {
+//   timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+//     service.on('desligarTimer').listen((event) {
+//       debugPrint("Entrou no desligarTimer");
+
+//       timer.cancel();
+//     });
+
+//     obterTempo(service);
+//     debugPrint("Entrou no timer");
+//   });
+// }
+
+void restartTimer(Timer? timer, ServiceInstance service) async {
+  // Cancela timer existente se houver
+  timer?.cancel();
+  bool isMonitoringPaused = false;
+
+  service.on('pauseMonitoring').listen((event) {
+    isMonitoringPaused = event?['paused'] ?? false;
+    if (isMonitoringPaused) {
+      timer?.cancel();
+    }
+  });
+
   timer = Timer.periodic(const Duration(seconds: 5), (timer) {
     service.on('desligarTimer').listen((event) {
       debugPrint("Entrou no desligarTimer");
-
+      service.invoke('setAsForeground');
       timer.cancel();
     });
 
+    //Garante que o serviço continue em foreground
+
+    // if (service is AndroidServiceInstance) {
+    //   service.setAsForegroundService();
+    // }
+
     obterTempo(service);
-    debugPrint("Entrou no timer");
+    debugPrint("Timer em execução");
   });
 }
 
@@ -28,11 +58,15 @@ Future<void> obterTempo(ServiceInstance service) async {
   }
 }
 
-Future<void> calculaTempo(
-    String result, FlutterBackgroundService service) async {
+Future<void> calculaTempo(String result) async {
   List<String> monitoredApps = await getMonitoredApps();
 
   debugPrint("MonitoredApps: $monitoredApps");
+
+  if (result == "") {
+    debugPrint("Result vazio");
+    return;
+  }
 
   if (monitoredApps.contains(result)) {
     Map<String, int> mapAppsCurrentTime = getMapAppsCurrentTime();
@@ -53,7 +87,8 @@ Future<void> calculaTempo(
         Map<String, int> mapAppsAcrescimCurrentTime =
             getMapAppAcrescimCurrentTime();
         int currentTimeAcrescim = mapAppsAcrescimCurrentTime[result] ?? 0;
-        if (!(currentTimeAcrescim >= getMapAppTimeAcrescimLimit()[result]!)) {
+        if (!(currentTimeAcrescim >=
+            (getMapAppTimeAcrescimLimit()[result] ?? 0))) {
           mapAppsAcrescimCurrentTime[result] = currentTimeAcrescim + 5;
           setMapAppAcrescimCurrentTime(mapAppsAcrescimCurrentTime);
         }
@@ -61,13 +96,15 @@ Future<void> calculaTempo(
             "CurrentTimeAcrescim: ${mapAppsAcrescimCurrentTime[result]}");
         debugPrint(
             "TimeAcrescimLimit: ${getMapAppTimeAcrescimLimit()[result]}");
-        if (currentTimeAcrescim >= getMapAppTimeAcrescimLimit()[result]!) {
+        if (currentTimeAcrescim >=
+            (getMapAppTimeAcrescimLimit()[result] ?? 0)) {
           debugPrint("CurrentTimeAcrescim maior do que o Acrescimlimit");
-          await exibirTela(service, result);
+          await exibirTela(result);
         }
       } else {
         debugPrint("Entrou no else");
-        await exibirTela(service, result);
+        await exibirTela(//service,
+            result);
       }
     }
   }

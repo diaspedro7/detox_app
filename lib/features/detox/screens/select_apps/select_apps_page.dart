@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:detox_app/common/widgets/custom_icon_button.dart';
 import 'package:detox_app/common/widgets/floating_button.dart';
-import 'package:detox_app/common/widgets/goback_button.dart';
 import 'package:detox_app/common/widgets/gradient_background_container.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/custom_circular_progress_indicator.dart';
 import 'package:detox_app/common/widgets/body_background_container.dart';
@@ -87,7 +87,9 @@ class _SelectAppsPageState extends State<SelectAppsPage>
                 padding: const EdgeInsets.all(TSizes.defaultSpace),
                 child: Row(
                   children: [
-                    GoBackButton(onPressed: () => Navigator.pop(context)),
+                    CustomIconButton(
+                        icon: Icons.arrow_back_ios_new,
+                        onPressed: () => Navigator.pop(context)),
                     const SizedBox(width: TSizes.md),
                     Text(
                       TTexts.selectApps,

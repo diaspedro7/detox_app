@@ -3,8 +3,8 @@
 import 'package:detox_app/common/widgets/app_card.dart';
 import 'package:detox_app/common/widgets/body_background_container.dart';
 import 'package:detox_app/common/widgets/circular_slide_widget.dart';
+import 'package:detox_app/common/widgets/custom_icon_button.dart';
 import 'package:detox_app/common/widgets/floating_button.dart';
-import 'package:detox_app/common/widgets/goback_button.dart';
 import 'package:detox_app/common/widgets/gradient_background_container.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:detox_app/features/detox/screens/details/widgets/app_current_time.dart';
@@ -77,10 +77,12 @@ class _AppDetailsPageState extends State<AppDetailsPage>
                     children: [
                       Row(
                         children: [
-                          GoBackButton(onPressed: () {
-                            circularSlideStateController.valueReset();
-                            Navigator.pop(context);
-                          }),
+                          CustomIconButton(
+                              icon: Icons.arrow_back_ios_new,
+                              onPressed: () {
+                                circularSlideStateController.valueReset();
+                                Navigator.pop(context);
+                              }),
                           const SizedBox(width: TSizes.md),
                           TitleDetailsPage(appName: widget.app.appName),
                         ],

@@ -1,3 +1,4 @@
+import 'package:detox_app/common/widgets/custom_icon_button.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,28 @@ class TitleAlarmPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
-            Icons.timer_off_rounded,
-            size: TSizes.titleIcon,
-            color: Colors.white.withValues(alpha: 0.9),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Expanded(child: SizedBox()), // Espaço à esquerda
+              Icon(
+                Icons.timer_off_rounded,
+                size: TSizes.titleIcon,
+                color: Colors.white.withValues(alpha: 0.9),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: CustomIconButton(
+                        icon: Icons.home_filled,
+                        onPressed: () =>
+                            Navigator.pushReplacementNamed(context, "/home")),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: TSizes.spaceBtwItems / 2),
           Text(

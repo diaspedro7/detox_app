@@ -1,13 +1,15 @@
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
-class GoBackButton extends StatelessWidget {
-  const GoBackButton({
+class CustomIconButton extends StatelessWidget {
+  const CustomIconButton({
     super.key,
     required this.onPressed,
+    required this.icon,
   });
 
   final void Function() onPressed;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,7 @@ class GoBackButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new,
-            color: TColors.white, size: 20),
+        icon: Icon(icon, color: TColors.white, size: 20),
         onPressed: onPressed,
       ),
     );

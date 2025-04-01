@@ -51,6 +51,21 @@ dependencies:
   app_usage: ^4.0.0
   system_alert_window: ^2.0.4
   flutter_advanced_switch: ^3.1.0
+  flutter_overlay_window:
+  # workmanager:
+  #   git:
+  #     url: https://github.com/fluttercommunity/flutter_workmanager.git
+  #     path: workmanager
+  #     ref: main
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  adaptive_background_color: "#ffffff"
+  adaptive_icon_foreground: "assets/images/logo.png"
+  adaptive_icon_background: "#ffffff" 
+  image_path: "assets/images/logo.png"
 
 
 

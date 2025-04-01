@@ -1,5 +1,6 @@
 import 'package:detox_app/app.dart';
 import 'package:detox_app/data/services/background/flutter_background_service.dart';
+import 'package:detox_app/data/services/background/notification_on_kill_service.dart';
 import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
 import 'package:detox_app/features/detox/statecontrollers/details_page_statecontroller.dart';
 import 'package:detox_app/features/detox/statecontrollers/home_page_statecontroller.dart';
@@ -9,12 +10,16 @@ import 'package:detox_app/features/permission/statecontroller/permission_stateco
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'data/services/background/calculate_time_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +30,27 @@ void main() async {
   await Hive.openBox("permissionStorage");
   await Hive.openBox("selectedAppsStorage");
 
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'detox_channel',
+    'Detox Notifications',
+    description: 'Notificações do app Detox',
+    importance: Importance.high,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AppViewModel()),
     ChangeNotifierProvider(create: (_) => PermissionStateController()),
@@ -33,6 +59,8 @@ void main() async {
     ChangeNotifierProvider(create: (_) => HomePageStateController()),
     ChangeNotifierProvider(create: (_) => AppDetailsPageStateController()),
   ], child: const MyApp()));
+
+  NotifOnKill.toggleNotifOnKill(true);
 
   final service = FlutterBackgroundService();
 
@@ -46,6 +74,7 @@ void main() async {
   });
 
   service.on('obterTempoPrimeiroPlano').listen((event) async {
+    debugPrint("Entrou no obterTempoPrimeiroPlano");
     if (event != null) {
       bool varBool = event["isTrue"];
       if (varBool) {
@@ -54,7 +83,7 @@ void main() async {
         String resultText = await channel.invokeMethod('getTime');
         debugPrint("Esse Result1: $resultText");
 
-        calculaTempo(resultText, service);
+        calculaTempo(resultText);
 
         debugPrint("Esse Result2: $resultText");
       }

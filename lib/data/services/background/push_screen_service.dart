@@ -5,12 +5,12 @@ import 'package:detox_app/features/detox/screens/alarm/alarm_page.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:detox_app/main.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:provider/provider.dart';
 
 Future<void> exibirTela(
-    FlutterBackgroundService service, String packageName) async {
-  service.invoke('telaJaExibida', {'valor': true});
+    //FlutterBackgroundService service,
+    String packageName) async {
+  // service.invoke('telaJaExibida', {'valor': true});
 
   AppModel? app = await returnAppfromName(packageName);
 
@@ -36,11 +36,11 @@ Future<void> exibirTela(
         ], // Uso correto do FLAG_ACTIVITY_NEW_TASK
       );
       await intent.launch();
-      service.on('telaJaExibida').listen((event) {
-        if (event != null) {
-          debugPrint("TelaJaExibida no intent launch: ${event['valor']}");
-        }
-      });
+      // service.on('telaJaExibida').listen((event) {
+      //   if (event != null) {
+      //     debugPrint("TelaJaExibida no intent launch: ${event['valor']}");
+      //   }
+      // });
     } catch (e, stacktrace) {
       debugPrint("Erro ao tentar abrir o app: $e");
       debugPrint("Stacktrace: $stacktrace");

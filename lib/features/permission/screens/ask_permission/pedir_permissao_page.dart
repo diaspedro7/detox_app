@@ -97,14 +97,20 @@ class PedirPermissaoPage extends StatelessWidget {
 
 Future<bool> requestOverlayPermission() async {
   //pedir para o usuario permissao para sobrepor outros apps
-  final isGranted =
-      await Permission.systemAlertWindow.request().isGranted; //pede a permissao
-  if (isGranted) {
-    debugPrint("Permissao foi aceita");
-  } else {
-    debugPrint("Permissao negada");
+  try {
+    final isGranted = await Permission.systemAlertWindow
+        .request()
+        .isGranted; //pede a permissao
+    if (isGranted) {
+      debugPrint("Permissao foi aceita");
+    } else {
+      debugPrint("Permissao negada");
+    }
+    return isGranted;
+  } catch (e) {
+    debugPrint("Erro ao pedir permissao: $e");
+    return false;
   }
-  return isGranted;
 }
 
 Future<bool> init() async {
