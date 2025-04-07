@@ -1,48 +1,55 @@
-import 'package:detox_app/data/services/selected_apps_hive.dart';
+import 'package:detox_app/data/repositories/app_repository.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:installed_apps/app_info.dart';
-import 'package:installed_apps/installed_apps.dart';
 
 class AppViewModel extends ChangeNotifier {
+  final AppRepository _repository = AppRepository();
+
   List<AppModel> appsList = [];
   Map<String, bool> selectedAppsMap = {};
-
   List<AppModel> monitoredApps = [];
-
   bool _isLoading = false;
 
   Future<void> getAppsList() async {
     //get all the apps from the device
-    List<AppInfo> installedApps =
-        await InstalledApps.getInstalledApps(false, true, true);
+    try {
+      final installedApps = await _repository.getInstalledApps();
 
-    List<String> monitoredAppsPackageName =
-        await getMonitoredAppsLocalDatabase();
-    debugPrint("Local database: $monitoredAppsPackageName");
+      final monitoredAppsPackageName =
+          await _repository.getMonitoredAppsLocalDatabase();
 
-    //check if the app is already in the appList. It does it so the app is not added again
+      _processInstalledApps(installedApps, monitoredAppsPackageName);
+    } catch (e) {
+      debugPrint("Error loading apps: $e");
+    }
+  }
+
+  void _processInstalledApps(
+      List<AppModel> installedApps, List<String> monitoredAppsPackageName) {
     for (var app in installedApps) {
-      //debugPrint("App: ${app.name}, Icon: ${app.icon}");
+      bool exists = appsList.any(
+          (existingApp) => existingApp.appPackageName == app.appPackageName);
 
-      //check if the appList contains the app
-      bool exists = appsList
-          .any((existingApp) => existingApp.appPackageName == app.packageName);
-
-      if (!exists && !monitoredAppsPackageName.contains(app.packageName)) {
-        //add the app to the appList if does not
-        appsList.add(AppModel(
-            appName: app.name,
-            appIcon: app.icon != null && app.icon!.isNotEmpty
-                ? app.icon!
-                : Uint8List(0),
-            appPackageName: app.packageName));
+      if (!exists && !monitoredAppsPackageName.contains(app.appPackageName)) {
+        appsList.add(app);
       }
-      //put in the selectedAppsMap if does not exist yet
-      selectedAppsMap.putIfAbsent(app.packageName, () => false);
+
+      selectedAppsMap.putIfAbsent(app.appPackageName, () => false);
     }
     notifyListeners();
+  }
+
+  Future<bool> loadMonitoredApps(BuildContext context) async {
+    try {
+      // await Future.delayed(const Duration(seconds: 2)); // Delay intencional
+      final apps = await getMonitoredAppsLocalDatabase();
+      if (!context.mounted) return false;
+
+      await getSpecificApps(apps);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<void> getSpecificApps(List<String> packageNames) async {
@@ -54,71 +61,24 @@ class AppViewModel extends ChangeNotifier {
       notifyListeners();
 
       // Get all installed apps at once
-      List<AppInfo> installedApps =
-          await InstalledApps.getInstalledApps(false, true, true);
-
-      // Filter and add only the apps that are in our packageNames list
-      for (var app in installedApps) {
-        if (packageNames.contains(app.packageName)) {
-          monitoredApps.add(
-            AppModel(
-              appName: app.name,
-              appIcon: app.icon ?? Uint8List(0),
-              appPackageName: app.packageName,
-            ),
-          );
-        }
-      }
+      monitoredApps = await _repository.getAppsByListNames(packageNames);
+    } catch (e) {
+      debugPrint("Error in the function getSpecificApps: $e");
     } finally {
       notifyListeners();
     }
   }
 
-  Future<AppModel?> returnAppModel(String appPackageName) async {
-    List<AppInfo> installedApps =
-        await InstalledApps.getInstalledApps(false, true, true);
-
-    // Filter and add only the apps that are in our packageNames list
-    for (var app in installedApps) {
-      if (appPackageName.contains(app.packageName)) {
-        return AppModel(
-          appName: app.name,
-          appIcon: app.icon ?? Uint8List(0),
-          appPackageName: app.packageName,
-        );
-      }
+  Future<AppModel?> returnAppModel(String packageName) async {
+    try {
+      return await _repository.getSingleAppByName(packageName);
+    } catch (e) {
+      debugPrint("Error getting app by package name: $e");
+      return null;
     }
-    return null;
   }
 
-  // Future<void> getSpecificApps(List<String> packageNames) async {
-  //   monitoredApps.clear();
-
-  //   for (String packageName in packageNames) {
-  //     final AppInfo? appInfo = await InstalledApps.getAppInfo(
-  //         packageName, BuiltWith.native_or_others);
-
-  //     if (appInfo != null) {
-  //       monitoredApps.add(
-  //         AppModel(
-  //           appName: appInfo.name,
-  //           appIcon: appInfo.icon ?? Uint8List(0),
-  //           appPackageName: appInfo.packageName,
-  //         ),
-  //       );
-  //     }
-  //   }
-
-  //   notifyListeners();
-  // }
-
-  //Got substituted by the selectPageStateController
-  // void selectApp(String packageName) {
-  //   selectedAppsMap[packageName] = !selectedAppsMap[packageName]!;
-  //   notifyListeners();
-  // }
-
-  void recieveSelectedApps(Map<String, bool> selecteds) {
+  void updateSelectedApps(Map<String, bool> selecteds) {
     selectedAppsMap = selecteds;
     notifyListeners();
   }
@@ -130,7 +90,17 @@ class AppViewModel extends ChangeNotifier {
         .where((app) => selectedAppsMap[app.appPackageName] == true)
         .toList();
 
-    // AAdd the apps to the monitoredApps if they are not already there
+    // Add the apps to the monitoredApps if they are not already there
+    saveAppsPackageName = _updateMonitoredAppsList(newApps);
+
+    //add too the apps who are already in the list and save in the database
+    await _repository.saveMonitoredAppsLocalDatabase(saveAppsPackageName);
+
+    notifyListeners();
+  }
+
+  List<String> _updateMonitoredAppsList(List<AppModel> newApps) {
+    List<String> saveAppsPackageName = [];
     for (var app in newApps) {
       if (!monitoredApps
           .any((monitored) => monitored.appPackageName == app.appPackageName)) {
@@ -138,31 +108,25 @@ class AppViewModel extends ChangeNotifier {
         saveAppsPackageName.add(app.appPackageName);
       }
     }
-    //add too the apps who are already in the list
-    saveAppsPackageName.addAll(await getMonitoredApps());
-
-    await setMonitoredApps(saveAppsPackageName);
     notifyListeners();
+    return saveAppsPackageName;
   }
 
   void setSelectedAppsLocalDatabase() {
-    //debugPrint("Iniciando salvamento - selectedAppsMap: $selectedAppsMap");
     if (selectedAppsMap.isEmpty) {
-      debugPrint("Erro: Tentando salvar um mapa vazio!");
+      debugPrint("Error: Trying to save an empty map!");
       return;
     }
 
-    setSelectedAppsMap(selectedAppsMap);
+    _repository.saveSelectedApps(selectedAppsMap);
   }
 
   Future<List<String>> getMonitoredAppsLocalDatabase() async {
-    return await getMonitoredApps();
+    return await _repository.getMonitoredAppsLocalDatabase();
   }
 
   void setMapAppsTime(List<String> apps, int time) {
-    Map<String, int> appTimeMap = getAppTimeMap();
-    appTimeMap.addAll({for (var app in apps) app: time});
-    setAppTimeMap(appTimeMap);
+    _repository.setAppsTimeLimit(apps, time);
   }
 
   void clearAppsList() {

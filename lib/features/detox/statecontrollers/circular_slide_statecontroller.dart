@@ -32,7 +32,7 @@ class CircularSlideStateController extends ChangeNotifier {
   }
 
   void valueReset() {
-    radialValue = 10.0;
+    radialValue = 0.0;
     notifyListeners();
   }
 }

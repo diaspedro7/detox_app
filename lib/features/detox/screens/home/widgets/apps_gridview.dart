@@ -13,25 +13,13 @@ class AppsGridView extends StatelessWidget {
     super.key,
   });
 
-  Future<bool> _loadMonitoredApps(BuildContext context) async {
-    try {
-      await Future.delayed(const Duration(seconds: 2)); // Delay intencional
-      final apps = await getMonitoredApps();
-      if (!context.mounted) return false;
-
-      final viewModel = Provider.of<AppViewModel>(context, listen: false);
-      await viewModel.getSpecificApps(apps);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<AppViewModel>(context, listen: false);
+
     return Flexible(
       child: FutureBuilder<bool>(
-          future: _loadMonitoredApps(context),
+          future: viewModel.loadMonitoredApps(context),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(

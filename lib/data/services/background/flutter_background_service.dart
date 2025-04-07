@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:detox_app/data/services/background/calculate_time_service.dart';
-import 'package:detox_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();

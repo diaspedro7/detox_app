@@ -71,7 +71,7 @@ class _SelectAppsPageState extends State<SelectAppsPage>
         fadeAnimation: _fadeAnimation,
         buttonText: TTexts.saveSelection,
         onPressed: () async {
-          viewmodel.recieveSelectedApps(controller.selectedAppsMap);
+          viewmodel.updateSelectedApps(controller.selectedAppsMap);
           await Future.delayed(const Duration(seconds: 2));
           if (viewmodel.selectedAppsMap.isNotEmpty) {
             Navigator.pop(context);

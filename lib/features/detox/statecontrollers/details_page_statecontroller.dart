@@ -6,8 +6,12 @@ class AppDetailsPageStateController extends ChangeNotifier {
   int limitTimeMin = 0;
 
   int getLimitTime(String packageName) {
-    limitTimeMin = (getAppTimeMap()[packageName]! / 60).toInt();
-    return limitTimeMin;
+    try {
+      limitTimeMin = (getAppTimeMap()[packageName]! / 60).toInt();
+      return limitTimeMin;
+    } catch (e) {
+      return 0;
+    }
   }
 
   void setLimitTime(String packageName, int value) {
