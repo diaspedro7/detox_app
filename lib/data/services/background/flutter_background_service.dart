@@ -84,41 +84,7 @@ void onStart(ServiceInstance service) async {
     });
   }
 
-  service.on('appClosed').listen((event) async {
-    await showNotification();
-  });
-
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
-}
-
-// Future<void> startNativeService() async {
-//   const platform = MethodChannel('appsTimeUsage');
-//   try {
-//     await platform.invokeMethod('startBackgroundService');
-//   } catch (e) {
-//     debugPrint("Erro ao iniciar serviço nativo: $e");
-//   }
-// }
-
-const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-  'detox_channel', // ID do canal
-  'Detox Notifications', // Nome do canal
-  channelDescription: 'Notificações do app Detox',
-  importance: Importance.high,
-  priority: Priority.high,
-  ticker: 'ticker',
-);
-
-const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
-Future<void> showNotification() async {
-  await flutterLocalNotificationsPlugin.show(
-    0, // ID único baseado no tempo atual
-    'Detox App', // Título
-    'O app foi fechado. Volte para continuar monitorando!', // Corpo da notificação
-    platformChannelSpecifics,
-  );
 }

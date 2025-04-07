@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 final boxTempo = Hive.box("obterTempoBackground");
@@ -128,12 +129,22 @@ int getCurrentDay() {
 // --- Reset daily the usage time and acrescim time of the monitored apps ---
 
 void resetDailyUsageTime() {
+  debugPrint("CurrentDay: ${getCurrentDay()}");
   if (DateTime.now().day != getCurrentDay()) {
-    setMapAppUsageTime(<String, int>{});
+    setMapAppsCurrentTime(<String, int>{});
     setMapAppAcrescimCurrentTime(<String, int>{});
     setMapAppTimeAcrescimLimit(<String, int>{});
     setCurrentDay(DateTime.now().day);
   }
+  debugPrint("Current map Usage Time: ${getMapAppsCurrentTime()}");
 }
 
 // -------------X----------------
+
+void setIsLoading(bool value) {
+  boxTempo.put("isLoadingKey", value);
+}
+
+bool getIsLoading() {
+  return boxTempo.get("isLoadingKey", defaultValue: false);
+}

@@ -30,27 +30,6 @@ void main() async {
   await Hive.openBox("permissionStorage");
   await Hive.openBox("selectedAppsStorage");
 
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'detox_channel',
-    'Detox Notifications',
-    description: 'Notificações do app Detox',
-    importance: Importance.high,
-  );
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AppViewModel()),
     ChangeNotifierProvider(create: (_) => PermissionStateController()),
