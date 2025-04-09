@@ -1,5 +1,5 @@
 import 'package:detox_app/data/services/background/calculate_time_service.dart';
-import 'package:detox_app/features/permission/statecontroller/permission_statecontroller.dart';
+import 'package:detox_app/features/permission/viewmodel/permission_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,8 +49,7 @@ class _VerificaPermissaoPageState extends State<VerificaPermissaoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final controller =
-        Provider.of<PermissionStateController>(context, listen: true);
+    final controller = Provider.of<PermissionViewModel>(context, listen: true);
 
     return (controller.isBothPermissionsAccepted() == true
         ? const HomePage()

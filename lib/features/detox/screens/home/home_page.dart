@@ -9,8 +9,8 @@ import 'package:detox_app/features/detox/screens/home/widgets/apps_gridview.dart
 import 'package:detox_app/features/detox/screens/home/widgets/home_title.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/switch.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/switch_text.dart';
-import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
-import 'package:detox_app/features/detox/statecontrollers/home_page_statecontroller.dart';
+import 'package:detox_app/features/detox/viewmodels/circular_slide_viewmodel.dart';
+import 'package:detox_app/features/detox/viewmodels/home_page_viewmodel.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';

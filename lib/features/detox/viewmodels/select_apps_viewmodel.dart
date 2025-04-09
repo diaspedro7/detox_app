@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SelectAppsPageStatecontroller extends ChangeNotifier {
+class SelectAppsPageViewModel extends ChangeNotifier {
   Map<String, bool> selectedAppsMap = {};
 
   void initializeSelectedAppsMap(List<String> appsList) {

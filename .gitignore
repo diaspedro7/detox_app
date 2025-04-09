@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Fingerprint configuration files
+configure_fingerprint.bin
+**/configure_fingerprint.bin

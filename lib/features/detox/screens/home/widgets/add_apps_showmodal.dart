@@ -1,8 +1,8 @@
 import 'package:detox_app/common/widgets/circular_slide_widget.dart';
 import 'package:detox_app/data/services/selected_apps_hive.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/select_apps.dart';
-import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
-import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
+import 'package:detox_app/features/detox/viewmodels/circular_slide_viewmodel.dart';
+import 'package:detox_app/features/detox/viewmodels/select_apps_viewmodel.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
@@ -47,7 +47,7 @@ void showAddAppsModal(BuildContext context) {
             //const SelectAppsExpansionTile(),
             Consumer<AppViewModel>(
               builder: (context, viewmodel, child) =>
-                  Consumer<SelectAppsPageStatecontroller>(
+                  Consumer<SelectAppsPageViewModel>(
                 builder: (context, pageController, child) => GestureDetector(
                     onTap: () async {
                       Navigator.pushNamed(context, "/select");
@@ -55,15 +55,15 @@ void showAddAppsModal(BuildContext context) {
                     child: const SelectApps()),
               ),
             ),
-            Consumer<CircularSlideStateController>(
+            Consumer<CircularSlideViewModel>(
               builder: (context, controller, child) =>
                   CircularSlide(controller: controller),
             ),
-            Consumer<SelectAppsPageStatecontroller>(
+            Consumer<SelectAppsPageViewModel>(
               builder: (context, selectPageController, child) =>
                   Consumer<AppViewModel>(
                 builder: (context, viewmodel, child) =>
-                    Consumer<CircularSlideStateController>(
+                    Consumer<CircularSlideViewModel>(
                   builder: (context, controller, child) => ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: TColors.primary,

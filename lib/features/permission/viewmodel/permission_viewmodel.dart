@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PermissionStateController extends ChangeNotifier {
+class PermissionViewModel extends ChangeNotifier {
   bool batteryPermission = false;
   bool overlayPermission = false;
 

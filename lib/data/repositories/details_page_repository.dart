@@ -1,27 +1,16 @@
 import 'package:detox_app/data/services/selected_apps_hive.dart';
 import 'package:detox_app/data/services/time_storage_hive.dart';
-import 'package:flutter/material.dart';
 
-class AppDetailsPageStateController extends ChangeNotifier {
-  int limitTimeMin = 0;
-
-  int getLimitTime(String packageName) {
-    try {
-      limitTimeMin = (getAppTimeMap()[packageName]! / 60).toInt();
-      return limitTimeMin;
-    } catch (e) {
-      return 0;
-    }
+class AppDetailsPageRepository {
+  Map<String, int> getLocalAppTimeMap() {
+    return getAppTimeMap();
   }
 
-  void setLimitTime(String packageName, int value) {
-    Map<String, int> mapAppTime = getAppTimeMap();
-    mapAppTime[packageName] = value;
-    setAppTimeMap(mapAppTime);
-    notifyListeners();
+  void setLocalAppTimeMap(Map<String, int> appTimeMap) {
+    setAppTimeMap(appTimeMap);
   }
 
-  void deleteApp(String packageName) async {
+  Future<void> deleteApp(String packageName) async {
     //Turn false
     Map<String, bool> selectedAppsMap = getSelectedAppsMap();
     selectedAppsMap[packageName] = false;

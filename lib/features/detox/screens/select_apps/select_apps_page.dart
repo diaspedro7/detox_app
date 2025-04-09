@@ -7,7 +7,7 @@ import 'package:detox_app/features/detox/screens/home/widgets/custom_circular_pr
 import 'package:detox_app/common/widgets/body_background_container.dart';
 import 'package:detox_app/features/detox/screens/select_apps/widgets/display_widgets.dart';
 import 'package:detox_app/features/detox/screens/select_apps/widgets/installed_apps_listview.dart';
-import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
+import 'package:detox_app/features/detox/viewmodels/select_apps_viewmodel.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
@@ -45,12 +45,11 @@ class _SelectAppsPageState extends State<SelectAppsPage>
 
       if (!mounted) return;
 
-      context.read<SelectAppsPageStatecontroller>().initializeSelectedAppsMap(
-          context
-              .read<AppViewModel>()
-              .appsList
-              .map((app) => app.appPackageName)
-              .toList());
+      context.read<SelectAppsPageViewModel>().initializeSelectedAppsMap(context
+          .read<AppViewModel>()
+          .appsList
+          .map((app) => app.appPackageName)
+          .toList());
     });
   }
 
@@ -64,7 +63,7 @@ class _SelectAppsPageState extends State<SelectAppsPage>
   Widget build(BuildContext context) {
     final viewmodel = context.watch<AppViewModel>();
     //viewmodel.getAppsList();
-    final controller = context.watch<SelectAppsPageStatecontroller>();
+    final controller = context.watch<SelectAppsPageViewModel>();
 
     return Scaffold(
       floatingActionButton: FloatingButton(

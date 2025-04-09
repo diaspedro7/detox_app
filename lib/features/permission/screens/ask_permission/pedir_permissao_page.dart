@@ -1,6 +1,6 @@
 // ignore_for_file: await_only_futures
 
-import 'package:detox_app/features/permission/statecontroller/permission_statecontroller.dart';
+import 'package:detox_app/features/permission/viewmodel/permission_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class PedirPermissaoPage extends StatelessWidget {
                   style: subtitle,
                 ),
                 const SizedBox(height: TSizes.sm),
-                Consumer<PermissionStateController>(
+                Consumer<PermissionViewModel>(
                   builder: (context, controller, child) => SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -71,7 +71,7 @@ class PedirPermissaoPage extends StatelessWidget {
                 Text("2. Permissão para desativar a otimização de bateria.",
                     style: subtitle),
                 const SizedBox(height: TSizes.sm),
-                Consumer<PermissionStateController>(
+                Consumer<PermissionViewModel>(
                   builder: (context, controller, child) => SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

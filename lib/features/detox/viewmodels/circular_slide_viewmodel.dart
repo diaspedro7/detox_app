@@ -1,8 +1,7 @@
-import 'package:detox_app/data/services/time_storage_hive.dart';
 import 'package:flutter/material.dart';
 
-class CircularSlideStateController extends ChangeNotifier {
-  double radialValue = 10.0;
+class CircularSlideViewModel extends ChangeNotifier {
+  double radialValue = 0.0;
 
   setRadialValue(double value) {
     radialValue = value;
@@ -28,7 +27,6 @@ class CircularSlideStateController extends ChangeNotifier {
     }
 
     notifyListeners();
-    setIntervalTime(radialValue.ceil());
   }
 
   void valueReset() {

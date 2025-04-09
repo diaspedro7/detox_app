@@ -32,7 +32,7 @@ class AppCurrentTimeDisplay extends StatelessWidget {
           const SizedBox(height: TSizes.sm),
           Text(
             "$time ${TTexts.minAbv}",
-            // "${detailsPageStateController.getLimitTime(widget.app.appPackageName)} min",
+            // "${detailsPageviewmodel.getLimitTime(widget.app.appPackageName)} min",
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   color: TColors.primary,
                   fontWeight: FontWeight.bold,

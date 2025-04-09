@@ -10,8 +10,8 @@ import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:detox_app/features/detox/screens/details/widgets/app_current_time.dart';
 import 'package:detox_app/features/detox/screens/details/widgets/delete_button.dart';
 import 'package:detox_app/features/detox/screens/details/widgets/details_title.dart';
-import 'package:detox_app/features/detox/statecontrollers/circular_slide_statecontroller.dart';
-import 'package:detox_app/features/detox/statecontrollers/details_page_statecontroller.dart';
+import 'package:detox_app/features/detox/viewmodels/circular_slide_viewmodel.dart';
+import 'package:detox_app/features/detox/viewmodels/details_page_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:detox_app/utils/constants/text_strings.dart';
@@ -47,21 +47,21 @@ class _AppDetailsPageState extends State<AppDetailsPage>
 
   @override
   Widget build(BuildContext context) {
-    final detailsPageStateController =
-        Provider.of<AppDetailsPageStateController>(context, listen: true);
+    final detailsPageviewmodel =
+        Provider.of<AppDetailsPageViewModel>(context, listen: true);
 
-    final circularSlideStateController =
-        Provider.of<CircularSlideStateController>(context, listen: true);
+    final circularSlideviewmodel =
+        Provider.of<CircularSlideViewModel>(context, listen: true);
 
-    // detailsPageStateController.getLimitTime(widget.app.appPackageName);
+    // detailsPageviewmodel.getLimitTime(widget.app.appPackageName);
 
     return Scaffold(
       floatingActionButton: FloatingButton(
         fadeAnimation: _fadeAnimation,
         buttonText: TTexts.saveChanges,
         onPressed: () {
-          detailsPageStateController.setLimitTime(widget.app.appPackageName,
-              circularSlideStateController.radialValue.ceil() * TSizes.oneMin);
+          detailsPageviewmodel.setLimitTime(widget.app.appPackageName,
+              circularSlideviewmodel.radialValue.ceil() * TSizes.oneMin);
         },
       ),
       body: GradientBackgroundContainer(
@@ -80,7 +80,7 @@ class _AppDetailsPageState extends State<AppDetailsPage>
                           CustomIconButton(
                               icon: Icons.arrow_back_ios_new,
                               onPressed: () {
-                                circularSlideStateController.valueReset();
+                                circularSlideviewmodel.valueReset();
                                 Navigator.pop(context);
                               }),
                           const SizedBox(width: TSizes.md),
@@ -90,7 +90,7 @@ class _AppDetailsPageState extends State<AppDetailsPage>
                       DeleteButton(
                         onPressed: () {
                           // TODO: Add a confirmation dialog
-                          detailsPageStateController
+                          detailsPageviewmodel
                               .deleteApp(widget.app.appPackageName);
 
                           Navigator.pop(context, true);
@@ -113,7 +113,7 @@ class _AppDetailsPageState extends State<AppDetailsPage>
                     child: Column(
                       children: [
                         AppCurrentTimeDisplay(
-                            time: detailsPageStateController
+                            time: detailsPageviewmodel
                                 .getLimitTime(widget.app.appPackageName)),
                         const SizedBox(height: TSizes.spaceBtwSections),
                         Text(
@@ -124,7 +124,7 @@ class _AppDetailsPageState extends State<AppDetailsPage>
                                   ),
                         ),
                         CircularSlide(
-                          controller: circularSlideStateController,
+                          controller: circularSlideviewmodel,
                         ),
                       ],
                     ),

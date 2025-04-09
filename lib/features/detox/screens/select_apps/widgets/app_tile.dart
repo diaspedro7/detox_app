@@ -1,5 +1,5 @@
 import 'package:detox_app/features/detox/models/app_model.dart';
-import 'package:detox_app/features/detox/statecontrollers/select_apps_statecontroller.dart';
+import 'package:detox_app/features/detox/viewmodels/select_apps_viewmodel.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class AppTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<SelectAppsPageStatecontroller>();
+    final controller = context.watch<SelectAppsPageViewModel>();
     // final viewmodel = context.watch<AppViewModel>();
 
     return Padding(

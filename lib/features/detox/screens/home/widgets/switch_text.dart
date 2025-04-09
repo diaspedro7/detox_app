@@ -1,4 +1,4 @@
-import 'package:detox_app/features/detox/statecontrollers/home_page_statecontroller.dart';
+import 'package:detox_app/features/detox/viewmodels/home_page_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +18,11 @@ class SwitchText extends StatelessWidget {
           TTexts.detoxModeIs,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
-        Consumer<HomePageStateController>(
-          builder: (context, stateController, child) => Text(
-            stateController.isActivated ? TTexts.enabled : TTexts.disabled,
+        Consumer<HomePageViewModel>(
+          builder: (context, viewmodel, child) => Text(
+            viewmodel.isActivated ? TTexts.enabled : TTexts.disabled,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: stateController.isActivated
+                  color: viewmodel.isActivated
                       ? TColors.primary
                       : TColors.darkGrey,
                 ),
