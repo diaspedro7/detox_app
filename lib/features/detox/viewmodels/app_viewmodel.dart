@@ -1,9 +1,13 @@
 import 'package:detox_app/data/repositories/app_repository.dart';
+import 'package:detox_app/data/repositories/selected_apps_storage_repository.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:flutter/material.dart';
 
 class AppViewModel extends ChangeNotifier {
-  final AppRepository _repository = AppRepository();
+  final AppRepository _repository;
+
+  AppViewModel({required SelectedAppsStorageRepository selectedApps})
+      : _repository = AppRepository(selectedApps: selectedApps);
 
   List<AppModel> appsList = [];
   Map<String, bool> selectedAppsMap = {};

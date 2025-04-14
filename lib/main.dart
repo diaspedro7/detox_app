@@ -1,6 +1,12 @@
 import 'package:detox_app/app.dart';
+import 'package:detox_app/data/repositories/permission_storage_repository.dart';
+import 'package:detox_app/data/repositories/selected_apps_storage_repository.dart';
+import 'package:detox_app/data/repositories/time_storage_repository.dart';
 import 'package:detox_app/data/services/background/flutter_background_service.dart';
 import 'package:detox_app/data/services/background/notification_on_kill_service.dart';
+import 'package:detox_app/data/services/databases/permission_storage_hive.dart';
+import 'package:detox_app/data/services/databases/selected_apps_hive.dart';
+import 'package:detox_app/data/services/databases/time_storage_hive.dart';
 import 'package:detox_app/features/detox/viewmodels/circular_slide_viewmodel.dart';
 import 'package:detox_app/features/detox/viewmodels/details_page_viewmodel.dart';
 import 'package:detox_app/features/detox/viewmodels/home_page_viewmodel.dart';
@@ -21,6 +27,8 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+// final CalculateTimeService calculateTimeService = CalculateTimeService();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeService();
@@ -31,12 +39,32 @@ void main() async {
   await Hive.openBox("selectedAppsStorage");
 
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => AppViewModel()),
+    Provider(create: (_) => SelectedAppsStorageHiveDataSource()),
+    ProxyProvider<SelectedAppsStorageHiveDataSource,
+            SelectedAppsStorageRepository>(
+        update: (_, dataSource, __) =>
+            SelectedAppsStorageRepository(dataSource: dataSource)),
+    Provider(create: (_) => PermissionStorageHiveDataSource()),
+    ProxyProvider<PermissionStorageHiveDataSource, PermissionStorageRepository>(
+        update: (_, dataSource, __) =>
+            PermissionStorageRepository(dataSource: dataSource)),
+    Provider(create: (_) => TimeStorageHiveDataSource()),
+    ProxyProvider<TimeStorageHiveDataSource, TimeStorageRepository>(
+        update: (_, dataSource, __) =>
+            TimeStorageRepository(dataSource: dataSource)),
+    ChangeNotifierProvider(
+        create: (_) => AppViewModel(
+            selectedApps: _.read<SelectedAppsStorageRepository>())),
     ChangeNotifierProvider(create: (_) => PermissionViewModel()),
     ChangeNotifierProvider(create: (_) => SelectAppsPageViewModel()),
     ChangeNotifierProvider(create: (_) => CircularSlideViewModel()),
-    ChangeNotifierProvider(create: (_) => HomePageViewModel()),
-    ChangeNotifierProvider(create: (_) => AppDetailsPageViewModel()),
+    ChangeNotifierProvider(
+        create: (_) =>
+            HomePageViewModel(timeStorage: _.read<TimeStorageRepository>())),
+    ChangeNotifierProvider(
+        create: (_) => AppDetailsPageViewModel(
+            selectedApps: _.read<SelectedAppsStorageRepository>(),
+            timeStorage: _.read<TimeStorageRepository>())),
   ], child: const MyApp()));
 
   NotifOnKill.toggleNotifOnKill(true);

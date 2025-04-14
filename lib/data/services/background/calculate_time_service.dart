@@ -1,24 +1,23 @@
 import 'dart:async';
 
 import 'package:app_usage/app_usage.dart';
+import 'package:detox_app/data/repositories/selected_apps_storage_repository.dart';
+import 'package:detox_app/data/repositories/time_storage_repository.dart';
 import 'package:detox_app/data/services/background/push_screen_service.dart';
-import 'package:detox_app/data/services/selected_apps_hive.dart';
-import 'package:detox_app/data/services/time_storage_hive.dart';
+import 'package:detox_app/data/services/databases/selected_apps_hive.dart';
+import 'package:detox_app/data/services/databases/time_storage_hive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 
-// void restartTimer(ServiceInstance service, Timer? timer) async {
-//   timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-//     service.on('desligarTimer').listen((event) {
-//       debugPrint("Entrou no desligarTimer");
+final PushScreenService _pushScreenService = PushScreenService();
+// Note: This instance is created independently of dependency injection. Be aware if you change the Data Source, you will need to change this instance as well.
+final timeStorage =
+    TimeStorageRepository(dataSource: TimeStorageHiveDataSource());
 
-//       timer.cancel();
-//     });
-
-//     obterTempo(service);
-//     debugPrint("Entrou no timer");
-//   });
-// }
+// Note: This instance is created independently of dependency injection. Be aware if you change the Data Source, you will need to change this instance as well.
+final SelectedAppsStorageRepository _selectedApps =
+    SelectedAppsStorageRepository(
+        dataSource: SelectedAppsStorageHiveDataSource());
 
 void restartTimer(Timer? timer, ServiceInstance service) async {
   // Cancela timer existente se houver
@@ -38,13 +37,7 @@ void restartTimer(Timer? timer, ServiceInstance service) async {
       service.invoke('setAsForeground');
       timer.cancel();
     });
-
-    //Garante que o serviço continue em foreground
-
-    // if (service is AndroidServiceInstance) {
-    //   service.setAsForegroundService();
-    // }
-
+    debugPrint("Entrou no obter tempo");
     obterTempo(service);
     debugPrint("Timer em execução");
   });
@@ -59,7 +52,7 @@ Future<void> obterTempo(ServiceInstance service) async {
 }
 
 Future<void> calculaTempo(String result) async {
-  List<String> monitoredApps = await getMonitoredApps();
+  List<String> monitoredApps = await _selectedApps.getMonitoredApps();
 
   debugPrint("MonitoredApps: $monitoredApps");
 
@@ -69,41 +62,42 @@ Future<void> calculaTempo(String result) async {
   }
 
   if (monitoredApps.contains(result)) {
-    Map<String, int> mapAppsCurrentTime = getMapAppsCurrentTime();
+    Map<String, int> mapAppsCurrentTime = timeStorage.getMapAppsCurrentTime();
     int currentTime = mapAppsCurrentTime[result] ?? 0;
     debugPrint("CurrentTime: $currentTime");
-    debugPrint("Time limit: ${getAppTimeMap()[result]}");
-    if (!(currentTime >= getAppTimeMap()[result]!)) {
+    debugPrint("Time limit: ${_selectedApps.getAppTimeMap()[result]}");
+    if (!(currentTime >= _selectedApps.getAppTimeMap()[result]!)) {
       mapAppsCurrentTime[result] = currentTime + 5;
-      setMapAppsCurrentTime(mapAppsCurrentTime);
+      timeStorage.setMapAppsCurrentTime(mapAppsCurrentTime);
     }
-    if (currentTime >= getAppTimeMap()[result]!) {
+    if (currentTime >= _selectedApps.getAppTimeMap()[result]!) {
       debugPrint("CurrentTime maior do que o limit");
-      Map<String, bool> mapAppsAcrescimActivaded = getMapAppAcrescimBool();
+      Map<String, bool> mapAppsAcrescimActivaded =
+          timeStorage.getMapAppAcrescimBool();
       bool thisAppActivated = mapAppsAcrescimActivaded[result] ?? false;
 
       if (thisAppActivated) {
         debugPrint("ThisAppActivated: $thisAppActivated");
         Map<String, int> mapAppsAcrescimCurrentTime =
-            getMapAppAcrescimCurrentTime();
+            timeStorage.getMapAppAcrescimCurrentTime();
         int currentTimeAcrescim = mapAppsAcrescimCurrentTime[result] ?? 0;
         if (!(currentTimeAcrescim >=
-            (getMapAppTimeAcrescimLimit()[result] ?? 0))) {
+            (timeStorage.getMapAppTimeAcrescimLimit()[result] ?? 0))) {
           mapAppsAcrescimCurrentTime[result] = currentTimeAcrescim + 5;
-          setMapAppAcrescimCurrentTime(mapAppsAcrescimCurrentTime);
+          timeStorage.setMapAppAcrescimCurrentTime(mapAppsAcrescimCurrentTime);
         }
         debugPrint(
             "CurrentTimeAcrescim: ${mapAppsAcrescimCurrentTime[result]}");
         debugPrint(
-            "TimeAcrescimLimit: ${getMapAppTimeAcrescimLimit()[result]}");
+            "TimeAcrescimLimit: ${timeStorage.getMapAppTimeAcrescimLimit()[result]}");
         if (currentTimeAcrescim >=
-            (getMapAppTimeAcrescimLimit()[result] ?? 0)) {
+            (timeStorage.getMapAppTimeAcrescimLimit()[result] ?? 0)) {
           debugPrint("CurrentTimeAcrescim maior do que o Acrescimlimit");
-          await exibirTela(result);
+          await _pushScreenService.showScreen(result);
         }
       } else {
         debugPrint("Entrou no else");
-        await exibirTela(//service,
+        await _pushScreenService.showScreen(//service,
             result);
       }
     }

@@ -1,20 +1,22 @@
 import 'package:detox_app/data/repositories/home_page_repository.dart';
+import 'package:detox_app/data/repositories/time_storage_repository.dart';
 import 'package:flutter/material.dart';
 
 class HomePageViewModel extends ChangeNotifier {
-  final HomePageRepository _repository = HomePageRepository();
+  HomePageRepository repository;
 
   bool isActivated = false;
 
-  HomePageViewModel() {
-    isActivated = _repository.getLocalActivateAppService();
+  HomePageViewModel({required TimeStorageRepository timeStorage})
+      : repository = HomePageRepository(timeStorage: timeStorage) {
+    isActivated = repository.getLocalActivateAppService();
   }
 
   void activateAppService(dynamic value) {
     debugPrint(value.toString());
     if (value is bool) {
-      _repository.setLocalActivateAppService(value);
-      debugPrint("Value no hive: ${_repository.getLocalActivateAppService()}");
+      repository.setLocalActivateAppService(value);
+      debugPrint("Value no hive: ${repository.getLocalActivateAppService()}");
       isActivated = value;
       notifyListeners();
     }

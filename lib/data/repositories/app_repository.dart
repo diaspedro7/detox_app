@@ -1,13 +1,18 @@
 import 'dart:typed_data';
 
-import 'package:detox_app/data/services/selected_apps_hive.dart';
+import 'package:detox_app/data/repositories/selected_apps_storage_repository.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
 
 class AppRepository {
-  //get all the apps from the device
+  final SelectedAppsStorageRepository _selectedApps;
+
+  AppRepository({required SelectedAppsStorageRepository selectedApps})
+      : _selectedApps = selectedApps;
+
+//get all the apps from the device
   Future<List<AppModel>> getInstalledApps() async {
     debugPrint("Entrou na funcao do repository");
 
@@ -27,14 +32,14 @@ class AppRepository {
   }
 
   Future<List<String>> getMonitoredAppsLocalDatabase() async {
-    return await getMonitoredApps();
+    return await _selectedApps.getMonitoredApps();
   }
 
   Future<void> saveMonitoredAppsLocalDatabase(List<String> packageNames) async {
-    List<String> existingApps = await getMonitoredApps();
+    List<String> existingApps = await _selectedApps.getMonitoredApps();
     packageNames.addAll(existingApps);
 
-    await setMonitoredApps(packageNames);
+    await _selectedApps.setMonitoredApps(packageNames);
   }
 
   Future<List<AppModel>> getAppsByListNames(List<String> packageNames) async {
@@ -76,12 +81,12 @@ class AppRepository {
   }
 
   Future<void> saveSelectedApps(Map<String, bool> selectedApps) async {
-    setSelectedAppsMap(selectedApps);
+    _selectedApps.setSelectedAppsMap(selectedApps);
   }
 
   Future<void> setAppsTimeLimit(List<String> apps, int time) async {
-    Map<String, int> appTimeMap = getAppTimeMap();
+    Map<String, int> appTimeMap = _selectedApps.getAppTimeMap();
     appTimeMap.addAll({for (var app in apps) app: time});
-    setAppTimeMap(appTimeMap);
+    _selectedApps.setAppTimeMap(appTimeMap);
   }
 }

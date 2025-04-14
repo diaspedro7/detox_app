@@ -1,54 +1,61 @@
-import 'package:detox_app/data/services/selected_apps_hive.dart';
-import 'package:detox_app/data/services/time_storage_hive.dart';
+import 'package:detox_app/data/repositories/selected_apps_storage_repository.dart';
+import 'package:detox_app/data/repositories/time_storage_repository.dart';
 
 class AppDetailsPageRepository {
+  final TimeStorageRepository timeStorage;
+  final SelectedAppsStorageRepository selectedApps;
+
+  AppDetailsPageRepository(
+      {required this.timeStorage, required this.selectedApps});
+
   Map<String, int> getLocalAppTimeMap() {
-    return getAppTimeMap();
+    return selectedApps.getAppTimeMap();
   }
 
   void setLocalAppTimeMap(Map<String, int> appTimeMap) {
-    setAppTimeMap(appTimeMap);
+    selectedApps.setAppTimeMap(appTimeMap);
   }
 
   Future<void> deleteApp(String packageName) async {
     //Turn false
-    Map<String, bool> selectedAppsMap = getSelectedAppsMap();
+    Map<String, bool> selectedAppsMap = selectedApps.getSelectedAppsMap();
     selectedAppsMap[packageName] = false;
-    setSelectedAppsMap(selectedAppsMap);
+    selectedApps.setSelectedAppsMap(selectedAppsMap);
 
     //Remove from monitored apps list
-    List<String> monitoredAppsList = await getMonitoredApps();
+    List<String> monitoredAppsList = await selectedApps.getMonitoredApps();
     monitoredAppsList.remove(packageName);
-    await setMonitoredApps(monitoredAppsList);
+    await selectedApps.setMonitoredApps(monitoredAppsList);
 
     //Remove from app time map
-    Map<String, int> appTimeMap = getAppTimeMap();
+    Map<String, int> appTimeMap = selectedApps.getAppTimeMap();
     appTimeMap.remove(packageName);
-    setAppTimeMap(appTimeMap);
+    selectedApps.setAppTimeMap(appTimeMap);
 
     //remove from current usage time map
-    Map<String, int> currentTimeMap = getMapAppsCurrentTime();
+    Map<String, int> currentTimeMap = timeStorage.getMapAppsCurrentTime();
     currentTimeMap.remove(packageName);
-    setMapAppsCurrentTime(currentTimeMap);
+    timeStorage.setMapAppsCurrentTime(currentTimeMap);
 
     //remove from acrescim mode bool map
-    Map<String, bool> acrecismModeMap = getMapAppAcrescimBool();
+    Map<String, bool> acrecismModeMap = timeStorage.getMapAppAcrescimBool();
     acrecismModeMap.remove(packageName);
-    setMapAppAcrescimBool(acrecismModeMap);
+    timeStorage.setMapAppAcrescimBool(acrecismModeMap);
 
     //remove from acrescim mode time map
-    Map<String, int> acrecismTimeMap = getMapAppTimeAcrescimLimit();
+    Map<String, int> acrecismTimeMap = timeStorage.getMapAppTimeAcrescimLimit();
     acrecismTimeMap.remove(packageName);
-    setMapAppTimeAcrescimLimit(acrecismTimeMap);
+    timeStorage.setMapAppTimeAcrescimLimit(acrecismTimeMap);
 
     //remove from acrescim current time map
-    Map<String, int> acrecismCurrentTimeMap = getMapAppAcrescimCurrentTime();
+    Map<String, int> acrecismCurrentTimeMap =
+        timeStorage.getMapAppAcrescimCurrentTime();
     acrecismCurrentTimeMap.remove(packageName);
-    setMapAppAcrescimCurrentTime(acrecismCurrentTimeMap);
+    timeStorage.setMapAppAcrescimCurrentTime(acrecismCurrentTimeMap);
 
     //remove from monitored apps usage time
-    Map<String, int> monitoredAppsUsageTime = getMapAppUsageTime();
+    Map<String, int> monitoredAppsUsageTime = timeStorage.getMapAppUsageTime();
     monitoredAppsUsageTime.remove(packageName);
-    setMapAppUsageTime(monitoredAppsUsageTime);
+    timeStorage.setMapAppUsageTime(monitoredAppsUsageTime);
   }
 }

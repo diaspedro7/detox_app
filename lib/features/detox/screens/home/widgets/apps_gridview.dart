@@ -1,4 +1,4 @@
-import 'package:detox_app/data/services/selected_apps_hive.dart';
+import 'package:detox_app/data/repositories/selected_apps_storage_repository.dart';
 import 'package:detox_app/features/detox/screens/details/app_details_page.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/add_apps_button.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/custom_circular_progress_indicator.dart';
@@ -16,6 +16,7 @@ class AppsGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<AppViewModel>(context, listen: false);
+    final selectedApps = context.read<SelectedAppsStorageRepository>();
 
     return Flexible(
       child: FutureBuilder<bool>(
@@ -64,8 +65,8 @@ class AppsGridView extends StatelessWidget {
                       if (needsUpdate == true && context.mounted) {
                         final viewModel =
                             Provider.of<AppViewModel>(context, listen: false);
-                        await viewModel
-                            .getSpecificApps(await getMonitoredApps());
+                        await viewModel.getSpecificApps(
+                            await selectedApps.getMonitoredApps());
                       }
                     },
                     child: Image.memory(

@@ -1,7 +1,7 @@
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
 import 'package:detox_app/common/widgets/gradient_background_container.dart';
-import 'package:detox_app/data/services/time_storage_hive.dart';
+import 'package:detox_app/data/repositories/time_storage_repository.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:detox_app/common/widgets/app_card.dart';
 import 'package:detox_app/features/detox/screens/alarm/widgets/title_alarm_page.dart';
@@ -9,6 +9,7 @@ import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({super.key, required this.app});
@@ -29,6 +30,8 @@ class _AlarmPageState extends State<AlarmPage>
   @override
   void initState() {
     super.initState();
+    final timeStorage = context.read<TimeStorageRepository>();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
@@ -41,32 +44,34 @@ class _AlarmPageState extends State<AlarmPage>
       curve: Curves.easeInOut,
     ));
     _controller.forward();
-    Map<String, int> mapAppUsageTime = getMapAppUsageTime();
+    Map<String, int> mapAppUsageTime = timeStorage.getMapAppUsageTime();
     int thisAppUsageTime = mapAppUsageTime[widget.app.appPackageName] ?? 0;
 
     if (thisAppUsageTime == 0) {
       int thisAppCurrentTime =
-          getMapAppsCurrentTime()[widget.app.appPackageName] ?? 0;
+          timeStorage.getMapAppsCurrentTime()[widget.app.appPackageName] ?? 0;
       thisAppUsageTime = (thisAppCurrentTime / 60).ceil();
       mapAppUsageTime[widget.app.appPackageName] = thisAppUsageTime;
-      setMapAppUsageTime(mapAppUsageTime);
+      timeStorage.setMapAppUsageTime(mapAppUsageTime);
     }
 
-    Map<String, int> mapAppAcrescimCurrentTime = getMapAppAcrescimCurrentTime();
+    Map<String, int> mapAppAcrescimCurrentTime =
+        timeStorage.getMapAppAcrescimCurrentTime();
     int thisAppAcrescimCurrentTime =
         mapAppAcrescimCurrentTime[widget.app.appPackageName] ?? 0;
 
     if (thisAppAcrescimCurrentTime != 0) {
       thisAppUsageTime += (thisAppAcrescimCurrentTime / 60).ceil();
       mapAppUsageTime[widget.app.appPackageName] = thisAppUsageTime;
-      setMapAppUsageTime(mapAppUsageTime);
+      timeStorage.setMapAppUsageTime(mapAppUsageTime);
     }
 
     resetCurrentAcrescimTime();
 
-    Map<String, int> mapAppAcrescimTimeLimit = getMapAppTimeAcrescimLimit();
+    Map<String, int> mapAppAcrescimTimeLimit =
+        timeStorage.getMapAppTimeAcrescimLimit();
     mapAppAcrescimTimeLimit[widget.app.appPackageName] = 0;
-    setMapAppTimeAcrescimLimit(mapAppAcrescimTimeLimit);
+    timeStorage.setMapAppTimeAcrescimLimit(mapAppAcrescimTimeLimit);
   }
 
   @override
@@ -77,6 +82,8 @@ class _AlarmPageState extends State<AlarmPage>
 
   @override
   Widget build(BuildContext context) {
+    final timeStorage = context.read<TimeStorageRepository>();
+
     return Scaffold(
         body: GradientBackgroundContainer(
       child: FadeTransition(
@@ -121,7 +128,7 @@ class _AlarmPageState extends State<AlarmPage>
                       ),
                       const SizedBox(height: TSizes.spaceBtwItems),
                       Text(
-                        "${TTexts.usageTime} ${getMapAppUsageTime()[widget.app.appPackageName]} ${TTexts.minutes}",
+                        "${TTexts.usageTime} ${timeStorage.getMapAppUsageTime()[widget.app.appPackageName]} ${TTexts.minutes}",
                         style: Theme.of(context)
                             .textTheme
                             .headlineSmall
@@ -259,41 +266,56 @@ class _AlarmPageState extends State<AlarmPage>
   }
 
   void setAcrescimTime(int time) {
-    Map<String, int> mapAcrescimtTimeLimit = getMapAppTimeAcrescimLimit();
+    final timeStorage = context.read<TimeStorageRepository>();
+
+    Map<String, int> mapAcrescimtTimeLimit =
+        timeStorage.getMapAppTimeAcrescimLimit();
     // int thisAppAcrescimTimeLimit =
     //     mapAcrescimtTimeLimit[widget.app.appPackageName] ?? 0;
     mapAcrescimtTimeLimit[widget.app.appPackageName] = time;
-    setMapAppTimeAcrescimLimit(mapAcrescimtTimeLimit);
+    timeStorage.setMapAppTimeAcrescimLimit(mapAcrescimtTimeLimit);
   }
 
   void setAcrescimActivated() {
-    Map<String, bool> mapAppsAcrescimActivated = getMapAppAcrescimBool();
+    final timeStorage = context.read<TimeStorageRepository>();
+
+    Map<String, bool> mapAppsAcrescimActivated =
+        timeStorage.getMapAppAcrescimBool();
     bool thisAppAcrescimActivated =
         mapAppsAcrescimActivated[widget.app.appPackageName] ?? false;
     if (!thisAppAcrescimActivated) {
       mapAppsAcrescimActivated[widget.app.appPackageName] = true;
-      setMapAppAcrescimBool(mapAppsAcrescimActivated);
+      timeStorage.setMapAppAcrescimBool(mapAppsAcrescimActivated);
     }
   }
 
   void setAcrescimDesactivated() {
-    Map<String, bool> mapAppsAcrescimActivated = getMapAppAcrescimBool();
+    final timeStorage = context.read<TimeStorageRepository>();
+
+    Map<String, bool> mapAppsAcrescimActivated =
+        timeStorage.getMapAppAcrescimBool();
     mapAppsAcrescimActivated[widget.app.appPackageName] = false;
-    setMapAppAcrescimBool(mapAppsAcrescimActivated);
+    timeStorage.setMapAppAcrescimBool(mapAppsAcrescimActivated);
   }
 
   void resetCurrentAcrescimTime() {
-    Map<String, int> mapAppAcrescimCurrentTime = getMapAppAcrescimCurrentTime();
+    final timeStorage = context.read<TimeStorageRepository>();
+
+    Map<String, int> mapAppAcrescimCurrentTime =
+        timeStorage.getMapAppAcrescimCurrentTime();
     mapAppAcrescimCurrentTime[widget.app.appPackageName] = 0;
-    setMapAppAcrescimCurrentTime(mapAppAcrescimCurrentTime);
+    timeStorage.setMapAppAcrescimCurrentTime(mapAppAcrescimCurrentTime);
   }
 
   int sumUsageTime() {
+    final timeStorage = context.read<TimeStorageRepository>();
+
     int sumUsageTime = 0;
-    Map<String, int> mapAppsCurrentTime = getMapAppsCurrentTime();
+    Map<String, int> mapAppsCurrentTime = timeStorage.getMapAppsCurrentTime();
     int currentTime = mapAppsCurrentTime[widget.app.appPackageName] ?? 0;
 
-    Map<String, int> mapAppAcrescimCurrentTime = getMapAppAcrescimCurrentTime();
+    Map<String, int> mapAppAcrescimCurrentTime =
+        timeStorage.getMapAppAcrescimCurrentTime();
     int thisAppAcrescimCurrentTime =
         mapAppAcrescimCurrentTime[widget.app.appPackageName] ?? 0;
     sumUsageTime = currentTime + thisAppAcrescimCurrentTime;

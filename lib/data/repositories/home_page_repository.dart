@@ -1,11 +1,15 @@
-import 'package:detox_app/data/services/time_storage_hive.dart';
+import 'package:detox_app/data/repositories/time_storage_repository.dart';
 
 class HomePageRepository {
+  final TimeStorageRepository timeStorage;
+
+  HomePageRepository({required this.timeStorage});
+
   bool getLocalActivateAppService() {
-    return getActivateAppService();
+    return timeStorage.getActivateAppService();
   }
 
   void setLocalActivateAppService(bool value) {
-    setActivateAppService(value);
+    timeStorage.setActivateAppService(value);
   }
 }

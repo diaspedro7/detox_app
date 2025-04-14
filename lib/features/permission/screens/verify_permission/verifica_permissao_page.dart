@@ -44,6 +44,8 @@ class _VerificaPermissaoPageState extends State<VerificaPermissaoPage> {
     // getPermission();
     // initializeData();
     //  Future.delayed(const Duration(seconds: 3));
+    // final CalculateTimeService calculateTimeService = CalculateTimeService();
+
     fetchAppUsage(DateTime.now());
   }
 
