@@ -14,11 +14,15 @@ class HomePageViewModel extends ChangeNotifier {
 
   void activateAppService(dynamic value) {
     debugPrint(value.toString());
-    if (value is bool) {
-      repository.setLocalActivateAppService(value);
-      debugPrint("Value no hive: ${repository.getLocalActivateAppService()}");
-      isActivated = value;
-      notifyListeners();
+    try {
+      if (value is bool) {
+        repository.setLocalActivateAppService(value);
+        debugPrint("Value no hive: ${repository.getLocalActivateAppService()}");
+        isActivated = value;
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint("Error in func activateAppService ${e.toString()}");
     }
   }
 }

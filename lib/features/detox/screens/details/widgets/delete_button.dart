@@ -20,6 +20,7 @@ class DeleteButton extends StatelessWidget {
       child: IconButton(
         icon: const Icon(
           Icons.delete_outline_rounded,
+          // Icons.delete_outline_rounded,
           color: TColors.white,
           size: TSizes.iconMd,
         ),

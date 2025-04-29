@@ -1,7 +1,8 @@
 /// This class contains all the App Text in String formats.
 class TTexts {
   static const String appName = "Dopamini";
-  static const String slogan = "Take control of your digital well-being";
+  static const String slogan = "Stay mindfull while scrolling.";
+  // static const String slogan = "Take control of your digital well-being";
 
   static const String minAbv = "min";
   static const String minutes = "minutes";
@@ -15,14 +16,15 @@ class TTexts {
   static const String timesUp = "Time's Up!";
   static const String reachedUsageLimit =
       "You've reached your app usage limit.";
-  static const String chooseOptions =
-      "You can choose to stop using this app for today or extend your session.";
+  static const String chooseOptions = "Take a break or add more time.";
+  // "You can choose to stop using this app for today or extend your session.";
   static const String needMoreTime = "Need more time?";
   static const String currentLimit = "Current Limit";
-  static const String appSettings = "App Settings";
+  static const String appSettings = "Settings";
+  // static const String appSettings = "App Settings";
   static const String saveChanges = "Save Changes";
   static const String saveSelection = "Save Selection";
-  static const String adjustTimeLimit = "Adjust Time Limit";
+  static const String adjustTimeLimit = "Adjust the limit of time";
   static const String chooseAppToMonitor =
       "Choose the apps to monitor and set a time limit for their usage.";
   static const String addApplication = "Add Application";
@@ -36,4 +38,13 @@ class TTexts {
   static const String chooseYourApps = "Choose Your Apps";
   static const String installedApps = "Installed Apps:";
   static const String usageTime = "Usage time:";
+
+  static const String permissionTitle =
+      "To work properly, Dopamini needs the following permissions:";
+  static const String permissionOverApps =
+      "1. Allow Dopamini to appear over other apps.";
+  static const String permissionUsage =
+      "2. Allow app usage access to monitor your screen time.";
+  static const String permissionBattery =
+      "3. Disable battery optimization for Dopamini to ensure background performance.";
 }

@@ -7,7 +7,7 @@ import 'package:detox_app/data/services/background/flutter_background_service.da
 import 'package:detox_app/data/services/databases/permission_storage_hive.dart';
 import 'package:detox_app/data/services/databases/selected_apps_hive.dart';
 import 'package:detox_app/data/services/databases/time_storage_hive.dart';
-import 'package:detox_app/features/detox/screens/select_apps/select_apps_page.dart';
+import 'package:detox_app/features/detox/screens/select/select_apps_page.dart';
 import 'package:detox_app/features/permission/screens/verify_permission/verifica_permissao_page.dart';
 import 'package:detox_app/main.dart';
 import 'package:flutter/material.dart';
@@ -75,14 +75,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
-      theme: TAppTheme.lightTheme,
+      themeMode: ThemeMode.dark,
+      theme: TAppTheme.darkTheme,
       routes: {
         "/home": (context) => const HomePage(),
         "/select": (context) => const SelectAppsPage(),
       },
-      home: //const AlarmPage(packageName: "com.samsung.android.calendar")
-          Consumer<PermissionStorageRepository>(
+      home: Consumer<PermissionStorageRepository>(
         builder: (_, permissionStorage, __) =>
             permissionStorage.getPermission() == true
                 ? const HomePage()

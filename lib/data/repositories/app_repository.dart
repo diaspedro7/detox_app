@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:detox_app/data/repositories/selected_apps_storage_repository.dart';
+import 'package:detox_app/data/repositories/time_storage_repository.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:installed_apps/app_info.dart';
@@ -8,9 +9,13 @@ import 'package:installed_apps/installed_apps.dart';
 
 class AppRepository {
   final SelectedAppsStorageRepository _selectedApps;
+  final TimeStorageRepository _timeStorage;
 
-  AppRepository({required SelectedAppsStorageRepository selectedApps})
-      : _selectedApps = selectedApps;
+  AppRepository(
+      {required SelectedAppsStorageRepository selectedApps,
+      required TimeStorageRepository timeStorage})
+      : _selectedApps = selectedApps,
+        _timeStorage = timeStorage;
 
 //get all the apps from the device
   Future<List<AppModel>> getInstalledApps() async {
@@ -88,5 +93,55 @@ class AppRepository {
     Map<String, int> appTimeMap = _selectedApps.getAppTimeMap();
     appTimeMap.addAll({for (var app in apps) app: time});
     _selectedApps.setAppTimeMap(appTimeMap);
+  }
+
+  Future<void> deleteApp(String packageName) async {
+    debugPrint(
+        "Monitored apps antes de deletar: ${_selectedApps.getMonitoredApps()}");
+    //Turn false
+    Map<String, bool> selectedAppsMap = _selectedApps.getSelectedAppsMap();
+    selectedAppsMap[packageName] = false;
+    _selectedApps.setSelectedAppsMap(selectedAppsMap);
+
+    //Remove from monitored apps list
+    List<String> monitoredAppsList = await _selectedApps.getMonitoredApps();
+    monitoredAppsList.remove(packageName);
+    debugPrint("monitoredAppsList: $monitoredAppsList");
+    await _selectedApps.setMonitoredApps(monitoredAppsList);
+
+    //Remove from app time map
+    Map<String, int> appTimeMap = _selectedApps.getAppTimeMap();
+    appTimeMap.remove(packageName);
+    _selectedApps.setAppTimeMap(appTimeMap);
+
+    //remove from current usage time map
+    Map<String, int> currentTimeMap = _timeStorage.getMapAppsCurrentTime();
+    currentTimeMap.remove(packageName);
+    _timeStorage.setMapAppsCurrentTime(currentTimeMap);
+
+    //remove from acrescim mode bool map
+    Map<String, bool> acrecismModeMap = _timeStorage.getMapAppAcrescimBool();
+    acrecismModeMap.remove(packageName);
+    _timeStorage.setMapAppAcrescimBool(acrecismModeMap);
+
+    //remove from acrescim mode time map
+    Map<String, int> acrecismTimeMap =
+        _timeStorage.getMapAppTimeAcrescimLimit();
+    acrecismTimeMap.remove(packageName);
+    _timeStorage.setMapAppTimeAcrescimLimit(acrecismTimeMap);
+
+    //remove from acrescim current time map
+    Map<String, int> acrecismCurrentTimeMap =
+        _timeStorage.getMapAppAcrescimCurrentTime();
+    acrecismCurrentTimeMap.remove(packageName);
+    _timeStorage.setMapAppAcrescimCurrentTime(acrecismCurrentTimeMap);
+
+    //remove from monitored apps usage time
+    Map<String, int> monitoredAppsUsageTime = _timeStorage.getMapAppUsageTime();
+    monitoredAppsUsageTime.remove(packageName);
+    _timeStorage.setMapAppUsageTime(monitoredAppsUsageTime);
+
+    debugPrint(
+        "Monitored apps depois de deletar: ${_selectedApps.getMonitoredApps()}");
   }
 }

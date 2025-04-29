@@ -19,18 +19,6 @@ class CustomCircularProgressIndicator extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(TSizes.md),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: TSizes.ten,
-                  offset: const Offset(2, 2),
-                ),
-                BoxShadow(
-                  color: Colors.white.withValues(alpha: 0.8),
-                  blurRadius: TSizes.sm,
-                  offset: const Offset(-2, -2),
-                ),
-              ],
             ),
             child: const CircularProgressIndicator(
               color: Colors.blueAccent,

@@ -2,6 +2,7 @@ import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class TitleDisplay extends StatelessWidget {
   const TitleDisplay({
@@ -46,18 +47,12 @@ class TitleDisplay extends StatelessWidget {
             decoration: BoxDecoration(
               color: TColors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(TSizes.cardRadiusMd),
-              boxShadow: [
-                BoxShadow(
-                  color: TColors.primary.withValues(alpha: 0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
             ),
-            child: const Icon(
-              Icons.apps_rounded,
+            child: Icon(
+              PhosphorIcons.squaresFour(),
+              // Icons.apps_rounded,
               size: TSizes.iconLg,
-              color: TColors.white,
+              color: TColors.light,
             ),
           ),
         ],

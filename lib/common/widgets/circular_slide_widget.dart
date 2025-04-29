@@ -23,9 +23,9 @@ class CircularSlide extends StatelessWidget {
           labelsPosition: ElementsPosition.inside,
           showTicks: false,
           radiusFactor: 0.8,
-          axisLineStyle: const AxisLineStyle(
-            cornerStyle: CornerStyle.bothCurve,
-          ),
+          axisLineStyle: AxisLineStyle(
+              cornerStyle: CornerStyle.bothCurve,
+              color: TColors.light.withValues(alpha: 0.2)),
           pointers: [
             RangePointer(
               value: controller.radialValue,

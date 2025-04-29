@@ -1,6 +1,7 @@
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class FloatingButton extends StatelessWidget {
   const FloatingButton({
@@ -20,22 +21,23 @@ class FloatingButton extends StatelessWidget {
       scale: _fadeAnimation,
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              TColors.primary,
-              TColors.primary.withValues(alpha: 0.8),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: TColors.primary,
+          // gradient: LinearGradient(
+          //   colors: [
+          //     TColors.primary,
+          //     TColors.primary.withValues(alpha: 0.8),
+          //   ],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
           borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-          boxShadow: [
-            BoxShadow(
-              color: TColors.primary.withValues(alpha: 0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: TColors.primary.withValues(alpha: 0.3),
+          //     blurRadius: 8,
+          //     offset: const Offset(0, 4),
+          //   ),
+          // ],
         ),
         child: FloatingActionButton.extended(
           onPressed: () async {
@@ -53,7 +55,7 @@ class FloatingButton extends StatelessWidget {
                   ),
             ),
           ),
-          icon: const Icon(Icons.check_rounded, color: TColors.white),
+          icon: Icon(PhosphorIcons.check(), color: TColors.white),
         ),
       ),
     );

@@ -17,7 +17,7 @@ void showAddAppsModal(BuildContext context) {
     context: context,
     isScrollControlled: true,
     constraints: const BoxConstraints(maxHeight: TSizes.showModalMaxHeight),
-    backgroundColor: TColors.backgroundColor,
+    // backgroundColor: TColors.dark,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(TSizes.xl)),
     ),
@@ -48,14 +48,17 @@ void showAddAppsModal(BuildContext context) {
             const SizedBox(height: TSizes.spaceBtwSections),
             //const SelectAppsExpansionTile(),
             Consumer<AppViewModel>(
-              builder: (context, viewmodel, child) =>
-                  Consumer<SelectAppsPageViewModel>(
-                builder: (context, pageController, child) => GestureDetector(
-                    onTap: () async {
-                      Navigator.pushNamed(context, "/select");
-                    },
-                    child: const SelectApps()),
-              ),
+              builder: (context, viewmodel, child) => Consumer<
+                      SelectAppsPageViewModel>(
+                  builder: (context, pageController, child) => Material(
+                      color: TColors.neoBackground,
+                      borderRadius: BorderRadius.circular(TSizes.twelve),
+                      child: InkWell(
+                          borderRadius: BorderRadius.circular(TSizes.twelve),
+                          onTap: () async {
+                            Navigator.pushNamed(context, "/select");
+                          },
+                          child: const SelectApps()))),
             ),
             Consumer<CircularSlideViewModel>(
               builder: (context, controller, child) =>
@@ -77,8 +80,8 @@ void showAddAppsModal(BuildContext context) {
                       ),
                     ),
                     onPressed: () async {
-                      viewmodel.setSelectedAppsLocalDatabase();
-                      await viewmodel.setMonitoredAppsLocalDatabase();
+                      viewmodel.setSelectedAppsLocalDatabase(); //V
+                      await viewmodel.setMonitoredAppsLocalDatabase(); //V
                       viewmodel.setMapAppsTime(
                           await viewmodel.getMonitoredAppsLocalDatabase(),
                           controller.radialValue.ceil() * TSizes.oneMin);

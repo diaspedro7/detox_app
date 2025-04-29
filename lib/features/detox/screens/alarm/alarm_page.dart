@@ -1,6 +1,6 @@
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
-import 'package:detox_app/common/widgets/gradient_background_container.dart';
+import 'package:detox_app/common/widgets/body_background_container.dart';
 import 'package:detox_app/data/repositories/time_storage_repository.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:detox_app/common/widgets/app_card.dart';
@@ -85,7 +85,8 @@ class _AlarmPageState extends State<AlarmPage>
     final timeStorage = context.read<TimeStorageRepository>();
 
     return Scaffold(
-        body: GradientBackgroundContainer(
+        body: Container(
+      color: TColors.neoBackground,
       child: FadeTransition(
         opacity: _fadeAnimation,
         child: Column(
@@ -101,44 +102,65 @@ class _AlarmPageState extends State<AlarmPage>
               ),
             ),
             Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(top: TSizes.spaceBtwItems),
-                decoration: BoxDecoration(
-                  color: TColors.backgroundColor,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(TSizes.cardRadiusLg),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: TSizes.ten,
-                      offset: const Offset(0, -5),
-                    ),
-                  ],
-                ),
+              child: BodyBackgroundContainer(
                 child: SingleChildScrollView(
                   // padding: EdgeInsets.zero,
                   padding: const EdgeInsets.all(TSizes.defaultSpace),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AppCard(
-                        appIcon: widget.app.appIcon,
-                        appName: widget.app.appName,
+                      SizedBox(
+                        width: double.infinity,
+                        child: AppCard(
+                          appIcon: widget.app.appIcon,
+                          appName: widget.app.appName,
+                        ),
                       ),
                       const SizedBox(height: TSizes.spaceBtwItems),
-                      Text(
-                        "${TTexts.usageTime} ${timeStorage.getMapAppUsageTime()[widget.app.appPackageName]} ${TTexts.minutes}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(fontSize: TSizes.usageFontSize),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Text(
+                          //   "${TTexts.usageTime} ${timeStorage.getMapAppUsageTime()[widget.app.appPackageName]} ${TTexts.minutes}",
+                          //   style: Theme.of(context)
+                          //       .textTheme
+                          //       .headlineSmall
+                          //       ?.copyWith(fontSize: TSizes.usageFontSize),
+                          // ),
+                          Text(
+                            TTexts.usageTime,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(fontSize: TSizes.usageFontSize),
+                          ),
+                          Text(
+                            " ${timeStorage.getMapAppUsageTime()[widget.app.appPackageName]} ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                    fontSize: TSizes.usageFontSize,
+                                    color: TColors.primary),
+                          ),
+                          Text(
+                            TTexts.minutes,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                    fontSize: TSizes.usageFontSize,
+                                    color: TColors.primary),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: TSizes.spaceBtwSections),
                       Container(
                         padding: const EdgeInsets.all(TSizes.md),
                         decoration: BoxDecoration(
-                            color: TColors.primary.withValues(alpha: 0.05),
+                            color: TColors.white.withValues(alpha: 0.1),
+                            border: Border.all(
+                                color: TColors.white.withValues(alpha: 0.2)),
                             borderRadius:
                                 BorderRadius.circular(TSizes.cardRadiusLg)),
                         child: Column(
@@ -149,16 +171,16 @@ class _AlarmPageState extends State<AlarmPage>
                                   .textTheme
                                   .titleLarge
                                   ?.copyWith(
-                                    color: TColors.primary,
+                                    color: TColors.darkGrey,
                                     fontWeight: FontWeight.w600,
                                   ),
                             ),
-                            const SizedBox(height: TSizes.sm),
+                            const SizedBox(height: TSizes.twelve),
                             buildTimeExtensionGrid(),
                           ],
                         ),
                       ),
-                      const SizedBox(height: TSizes.spaceBtwSections),
+                      const SizedBox(height: 55.0),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -219,23 +241,16 @@ class _AlarmPageState extends State<AlarmPage>
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
         color: buttonIndex == index
-            ? TColors.primary.withValues(alpha: 0.1)
-            : Colors.white,
+            ? TColors.darkerGrey.withValues(alpha: 0.8)
+            : TColors.neoBackground,
         borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-        border: Border.all(color: TColors.primary.withValues(alpha: 0.3)),
-        boxShadow: [
-          BoxShadow(
-            color: TColors.primary.withValues(alpha: 0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        // border: Border.all(color: TColors.primary.withValues(alpha: 0.3)),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          overlayColor:
-              WidgetStateProperty.all(TColors.primary.withValues(alpha: 0.1)),
+          overlayColor: WidgetStateProperty.all(
+              TColors.neoBackground.withValues(alpha: 0.3)),
           onTap: () {
             setState(() {
               if (buttonIndex == index) {
@@ -255,7 +270,7 @@ class _AlarmPageState extends State<AlarmPage>
             child: Text(
               "+$minutes ${TTexts.minAbv}",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: TColors.primary,
+                    color: TColors.light,
                     fontWeight: FontWeight.w600,
                   ),
             ),

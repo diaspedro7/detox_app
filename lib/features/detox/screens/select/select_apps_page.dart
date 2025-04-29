@@ -2,17 +2,17 @@
 
 import 'package:detox_app/common/widgets/custom_icon_button.dart';
 import 'package:detox_app/common/widgets/floating_button.dart';
-import 'package:detox_app/common/widgets/gradient_background_container.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/custom_circular_progress_indicator.dart';
 import 'package:detox_app/common/widgets/body_background_container.dart';
-import 'package:detox_app/features/detox/screens/select_apps/widgets/display_widgets.dart';
-import 'package:detox_app/features/detox/screens/select_apps/widgets/installed_apps_listview.dart';
+import 'package:detox_app/features/detox/screens/select/widgets/display_widgets.dart';
+import 'package:detox_app/features/detox/screens/select/widgets/installed_apps_listview.dart';
 import 'package:detox_app/features/detox/viewmodels/select_apps_viewmodel.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
 class SelectAppsPage extends StatefulWidget {
@@ -70,14 +70,19 @@ class _SelectAppsPageState extends State<SelectAppsPage>
         fadeAnimation: _fadeAnimation,
         buttonText: TTexts.saveSelection,
         onPressed: () async {
-          viewmodel.updateSelectedApps(controller.selectedAppsMap);
-          await Future.delayed(const Duration(seconds: 2));
-          if (viewmodel.selectedAppsMap.isNotEmpty) {
-            Navigator.pop(context);
+          try {
+            viewmodel.updateSelectedApps(controller.selectedAppsMap);
+            await Future.delayed(const Duration(seconds: 2));
+            if (viewmodel.selectedAppsMap.isNotEmpty) {
+              Navigator.pop(context);
+            }
+          } catch (e) {
+            debugPrint("Error in saveSelection: $e");
           }
         },
       ),
-      body: GradientBackgroundContainer(
+      body: Container(
+        color: TColors.neoBackground,
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +92,8 @@ class _SelectAppsPageState extends State<SelectAppsPage>
                 child: Row(
                   children: [
                     CustomIconButton(
-                        icon: Icons.arrow_back_ios_new,
+                        // iconSize: TSizes.buttonHeight,
+                        icon: PhosphorIcons.caretLeft(),
                         onPressed: () => Navigator.pop(context)),
                     const SizedBox(width: TSizes.md),
                     Text(
@@ -96,6 +102,7 @@ class _SelectAppsPageState extends State<SelectAppsPage>
                           Theme.of(context).textTheme.headlineMedium?.copyWith(
                                 color: TColors.white,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 20,
                               ),
                     ),
                   ],

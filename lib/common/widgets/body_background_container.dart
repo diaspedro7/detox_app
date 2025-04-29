@@ -12,9 +12,11 @@ class BodyBackgroundContainer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: TSizes.spaceBtwItems),
       decoration: BoxDecoration(
-        color: TColors.backgroundColor,
+        color: TColors.dark,
+        // color: TColors.backgroundColor,
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(TSizes.cardRadiusLg),
+          top: Radius.circular(25.0),
+          // top: Radius.circular(TSizes.cardRadiusLg),
         ),
         boxShadow: [
           BoxShadow(

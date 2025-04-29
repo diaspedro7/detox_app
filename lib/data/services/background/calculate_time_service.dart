@@ -104,30 +104,32 @@ Future<void> calculaTempo(String result) async {
   }
 }
 
-Future<List<AppUsageInfo>> fetchAppUsage(DateTime dataInicial) async {
-  final List<String> monitoredApps = ['Roblox', 'TikTok', 'Youtube'];
+Future<void> fetchAppUsage(
+    // DateTime dataInicial
+    ) async {
+  // final List<String> monitoredApps = ['Roblox', 'TikTok', 'Youtube'];
 
   try {
     DateTime endDate = DateTime.now();
     DateTime startDate = endDate.subtract(const Duration(days: 30));
 
-    debugPrint("endDate $endDate");
-    debugPrint("StartDate $startDate");
+    // debugPrint("endDate $endDate");
+    // debugPrint("StartDate $startDate");
 
-    await Future.delayed(const Duration(seconds: 2));
+    // await Future.delayed(const Duration(seconds: 2));
 
-    List<AppUsageInfo> infoList =
-        await AppUsage().getAppUsage(startDate, endDate);
+    // List<AppUsageInfo> infoList =
+    await AppUsage().getAppUsage(startDate, endDate);
 
-    List<AppUsageInfo> filteredUsage = infoList
-        .where((info) => monitoredApps.any((app) =>
-            info.appName.toLowerCase().contains(app.toLowerCase()) ||
-            info.packageName.toLowerCase().contains(app.toLowerCase())))
-        .toList();
+    // List<AppUsageInfo> filteredUsage = infoList
+    //     .where((info) => monitoredApps.any((app) =>
+    //         info.appName.toLowerCase().contains(app.toLowerCase()) ||
+    //         info.packageName.toLowerCase().contains(app.toLowerCase())))
+    //     .toList();
 
-    return filteredUsage;
+    // return filteredUsage;
   } on Exception catch (exception) {
     debugPrint("AppUsageException: $exception");
-    return List.empty();
+    // return List.empty();
   }
 }

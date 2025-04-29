@@ -5,8 +5,11 @@ class TColors {
 
   // App theme colors
   static const Color primary = Colors.blueAccent;
+  //static Color primary = Colors.deepPurple;
   static const Color secondary = Color.fromARGB(255, 75, 255, 111);
   static const Color accent = Color(0xFFb0c7ff);
+
+  static const Color neoBackground = Color(0xFF2E2E2E);
 
   // Gradient format example
   // static const Gradient linearGradient = LinearGradient(

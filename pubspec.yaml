@@ -58,6 +58,7 @@ dependencies:
   #     path: workmanager
   #     ref: main
   flutter_launcher_icons: ^0.14.3
+  phosphor_flutter: ^2.1.0
 
 flutter_launcher_icons:
   android: "launcher_icon"

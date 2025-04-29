@@ -9,10 +9,12 @@ class AppCard extends StatelessWidget {
     super.key,
     required this.appIcon,
     required this.appName,
+    this.color = TColors.neoBackground,
   });
 
   final String appName;
   final Uint8List appIcon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +26,9 @@ class AppCard extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(TSizes.md),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: color,
+        // color: Colors.white,
         borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-        boxShadow: [
-          BoxShadow(
-            color: TColors.primary.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -59,7 +55,7 @@ class AppCard extends StatelessWidget {
             child: Text(
               appName,
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    color: TColors.dark,
+                    color: TColors.light,
                   ),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,

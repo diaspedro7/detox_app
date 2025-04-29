@@ -13,6 +13,7 @@ import 'package:detox_app/features/detox/viewmodels/home_page_viewmodel.dart';
 import 'package:detox_app/features/detox/viewmodels/select_apps_viewmodel.dart';
 import 'package:detox_app/features/detox/viewmodels/app_viewmodel.dart';
 import 'package:detox_app/features/permission/viewmodel/permission_viewmodel.dart';
+import 'package:detox_app/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -38,6 +39,13 @@ void main() async {
   await Hive.openBox("permissionStorage");
   await Hive.openBox("selectedAppsStorage");
 
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: TColors.dark,
+    statusBarColor: TColors.dark,
+    statusBarIconBrightness: Brightness.light,
+    systemNavigationBarIconBrightness: Brightness.light,
+  ));
+
   runApp(MultiProvider(providers: [
     Provider(create: (_) => SelectedAppsStorageHiveDataSource()),
     ProxyProvider<SelectedAppsStorageHiveDataSource,
@@ -54,7 +62,8 @@ void main() async {
             TimeStorageRepository(dataSource: dataSource)),
     ChangeNotifierProvider(
         create: (_) => AppViewModel(
-            selectedApps: _.read<SelectedAppsStorageRepository>())),
+            selectedApps: _.read<SelectedAppsStorageRepository>(),
+            timeStorage: _.read<TimeStorageRepository>())),
     ChangeNotifierProvider(create: (_) => PermissionViewModel()),
     ChangeNotifierProvider(create: (_) => SelectAppsPageViewModel()),
     ChangeNotifierProvider(create: (_) => CircularSlideViewModel()),

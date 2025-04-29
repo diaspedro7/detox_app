@@ -2,6 +2,7 @@ import 'package:detox_app/utils/constants/colors.dart';
 import 'package:detox_app/utils/constants/sizes.dart';
 import 'package:detox_app/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class SelectApps extends StatelessWidget {
   const SelectApps({
@@ -13,7 +14,6 @@ class SelectApps extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: TColors.white,
         borderRadius: BorderRadius.circular(TSizes.md),
       ),
       child: Padding(
@@ -25,12 +25,13 @@ class SelectApps extends StatelessWidget {
               TTexts.selectApps,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const Padding(
-              padding: EdgeInsets.only(right: TSizes.ten),
+            Padding(
+              padding: const EdgeInsets.only(right: TSizes.ten),
               child: Icon(
-                Icons.add_rounded,
+                PhosphorIcons.plus(),
+                // Icons.add_rounded,
                 size: TSizes.iconMd,
-                color: TColors.black,
+                color: TColors.light,
               ),
             ),
           ],

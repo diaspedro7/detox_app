@@ -7,6 +7,7 @@ import 'package:detox_app/data/services/databases/time_storage_hive.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/add_apps_button.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/apps_count_display.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/apps_gridview.dart';
+import 'package:detox_app/features/detox/screens/home/widgets/apps_listview.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/home_title.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/switch.dart';
 import 'package:detox_app/features/detox/screens/home/widgets/switch_text.dart';
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TColors.backgroundColor,
+      // backgroundColor: TColors.backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(TSizes.lg),
@@ -79,7 +80,8 @@ class _HomePageState extends State<HomePage> {
                     ),
 
                     /// GridView apps
-                    AppsGridView(),
+                    // AppsGridView(),
+                    AppsListView(),
                   ],
                 ),
               )

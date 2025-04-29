@@ -1,13 +1,17 @@
 import 'package:detox_app/data/repositories/app_repository.dart';
 import 'package:detox_app/data/repositories/selected_apps_storage_repository.dart';
+import 'package:detox_app/data/repositories/time_storage_repository.dart';
 import 'package:detox_app/features/detox/models/app_model.dart';
 import 'package:flutter/material.dart';
 
 class AppViewModel extends ChangeNotifier {
   final AppRepository _repository;
 
-  AppViewModel({required SelectedAppsStorageRepository selectedApps})
-      : _repository = AppRepository(selectedApps: selectedApps);
+  AppViewModel(
+      {required SelectedAppsStorageRepository selectedApps,
+      required TimeStorageRepository timeStorage})
+      : _repository =
+            AppRepository(selectedApps: selectedApps, timeStorage: timeStorage);
 
   List<AppModel> appsList = [];
   Map<String, bool> selectedAppsMap = {};
@@ -47,7 +51,8 @@ class AppViewModel extends ChangeNotifier {
     try {
       // await Future.delayed(const Duration(seconds: 2)); // Delay intencional
       final apps = await getMonitoredAppsLocalDatabase();
-      if (!context.mounted) return false;
+      debugPrint("Load monitored apps: $apps");
+      // if (!context.mounted) return false;
 
       await getSpecificApps(apps);
       return true;
@@ -68,8 +73,10 @@ class AppViewModel extends ChangeNotifier {
       monitoredApps = await _repository.getAppsByListNames(packageNames);
     } catch (e) {
       debugPrint("Error in the function getSpecificApps: $e");
+      // _isLoading = false;
     } finally {
       notifyListeners();
+      // _isLoading = false;
     }
   }
 
@@ -137,5 +144,17 @@ class AppViewModel extends ChangeNotifier {
     appsList.clear();
     selectedAppsMap.clear();
     notifyListeners();
+  }
+
+  Future<void> deleteApp(String packageName, BuildContext context) async {
+    try {
+      await _repository.deleteApp(packageName);
+    } catch (e) {
+      debugPrint("Error in deleteApp: $e");
+    } finally {
+      monitoredApps
+          .removeWhere((element) => element.appPackageName == packageName);
+      notifyListeners();
+    }
   }
 }
